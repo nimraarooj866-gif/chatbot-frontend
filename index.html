@@ -278,7 +278,7 @@ async function uploadFile(input) {
     if (res.ok) {
       document.getElementById('fileName').textContent = input.files[0].name;
       document.getElementById('fileBadge').style.display = 'flex';
-      addMsg(`📎 File "${input.files[0].name}" uploaded! Ab is file ke baare mein poocho.`, 'ai');
+      addMsg(`📎 File "<b>${input.files[0].name}</b>" upload ho gayi! Ab is file ke baare mein kuch bhi poocho.`, 'ai');
       document.getElementById('welcomeScreen').style.display = 'none';
       document.getElementById('messages').style.display = 'flex';
     }
