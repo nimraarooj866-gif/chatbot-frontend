@@ -280,7 +280,7 @@ async function uploadFile(input) {
       document.getElementById('fileBadge').style.display = 'flex';
       document.getElementById('welcomeScreen').style.display = 'none';
       document.getElementById('messages').style.display = 'flex';
-      addMsg(`📎 File "<b>${input.files[0].name}</b>" upload ho gayi! Ab is file ke baare mein kuch bhi poocho.`, 'ai');
+      addMsg(`📎 File "<b>${input.files[0].name}</b>" File uploaded. Ask anything about this file`, 'ai');
     } else {
       alert(data.detail || 'File upload failed.');
     }
