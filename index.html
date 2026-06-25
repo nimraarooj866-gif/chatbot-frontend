@@ -12,7 +12,7 @@
   /* AUTH PAGES */
   .auth-wrapper { width: 100%; max-width: 420px; padding: 20px; }
   .auth-card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-  .auth-card h1 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 6px; }
+  .auth-card h1 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 28px; text-align: center; }
   .auth-card p { color: #666; font-size: 14px; margin-bottom: 28px; }
   .auth-card label { display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px; }
   .auth-card input { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; margin-bottom: 16px; }
@@ -289,9 +289,6 @@ async function uploadFile(input) {
 async function clearFile() {
   await fetch(`${BACKEND}/clear-file/${currentUser?.user_id || 'default'}`, { method: 'DELETE' });
   document.getElementById('fileBadge').style.display = 'none';
-}
- .auth-card h1{
-    text-align:center;
 }
 </script>
 </body>
