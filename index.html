@@ -268,26 +268,29 @@ async function sendMessage() {
 
 async function uploadFile(input) {
   if (!input.files[0]) return;
+  const userId = currentUser?.user_id || 'default';
   const formData = new FormData();
   formData.append('file', input.files[0]);
-  formData.append('user_id', currentUser?.user_id || 'default');
 
   try {
-    const res = await fetch(`${BACKEND}/upload`, { method: 'POST', body: formData });
+    const res = await fetch(`${BACKEND}/upload?user_id=${encodeURIComponent(userId)}`, { method: 'POST', body: formData });
     const data = await res.json();
     if (res.ok) {
       document.getElementById('fileName').textContent = input.files[0].name;
       document.getElementById('fileBadge').style.display = 'flex';
-      addMsg(`📎 File "<b>${input.files[0].name}</b>" upload ho gayi! Ab is file ke baare mein kuch bhi poocho.`, 'ai');
       document.getElementById('welcomeScreen').style.display = 'none';
       document.getElementById('messages').style.display = 'flex';
+      addMsg(`📎 File "<b>${input.files[0].name}</b>" upload ho gayi! Ab is file ke baare mein kuch bhi poocho.`, 'ai');
+    } else {
+      alert(data.detail || 'File upload failed.');
     }
-  } catch(e) { alert('File upload failed.'); }
+  } catch(e) { alert('File upload failed. Server se connect nahi ho saka.'); }
   input.value = '';
 }
 
 async function clearFile() {
-  await fetch(`${BACKEND}/clear-file/${currentUser?.user_id || 'default'}`, { method: 'DELETE' });
+  const userId = currentUser?.user_id || 'default';
+  await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, { method: 'DELETE' });
   document.getElementById('fileBadge').style.display = 'none';
 }
 </script>
