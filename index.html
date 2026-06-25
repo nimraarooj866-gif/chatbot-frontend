@@ -290,6 +290,9 @@ async function clearFile() {
   await fetch(`${BACKEND}/clear-file/${currentUser?.user_id || 'default'}`, { method: 'DELETE' });
   document.getElementById('fileBadge').style.display = 'none';
 }
+ .auth-card h1{
+    text-align:center;
+}
 </script>
 </body>
 </html>
