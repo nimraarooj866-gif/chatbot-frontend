@@ -1,446 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Chatbot</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Chatbot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f0f2f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+  /* AUTH PAGES */
+  .auth-wrapper { width: 100%; max-width: 420px; padding: 20px; }
+  .auth-card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .auth-card h1 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 6px; }
+  .auth-card p { color: #666; font-size: 14px; margin-bottom: 28px; }
+  .auth-card label { display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px; }
+  .auth-card input { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; margin-bottom: 16px; }
+  .auth-card input:focus { border-color: #6366f1; }
+  .auth-btn { width: 100%; padding: 12px; background: #6366f1; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .auth-btn:hover { background: #4f46e5; }
+  .auth-switch { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+  .auth-switch a { color: #6366f1; font-weight: 500; cursor: pointer; text-decoration: none; }
+  .auth-switch a:hover { text-decoration: underline; }
+  .auth-error { background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+  .auth-success { background: #f0fdf4; border: 1px solid #86efac; color: #16a34a; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
 
-    .chat-container {
-      background: white;
-      width: 100%;
-      max-width: 720px;
-      height: 92vh;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+  /* CHAT PAGE */
+  .chat-wrapper { display: none; width: 100%; max-width: 720px; height: 100vh; flex-direction: column; background: #fff; }
+  .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #eee; background: #fff; }
+  .chat-header-left { display: flex; align-items: center; gap: 10px; }
+  .status-dot { width: 9px; height: 9px; background: #22c55e; border-radius: 50%; }
+  .chat-header h2 { font-size: 16px; font-weight: 600; color: #111; }
+  .user-email { font-size: 13px; color: #888; }
+  .logout-btn { background: none; border: 1.5px solid #eee; padding: 6px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; color: #666; transition: all 0.2s; }
+  .logout-btn:hover { border-color: #dc2626; color: #dc2626; }
+  .file-badge { background: #ecfdf5; border: 1px solid #86efac; color: #16a34a; font-size: 12px; padding: 4px 10px; border-radius: 20px; display: none; align-items: center; gap: 6px; }
+  .file-badge button { background: none; border: none; cursor: pointer; color: #16a34a; font-size: 14px; line-height: 1; }
 
-    /* Header */
-    .chat-header {
-      background: #1a1a2e;
-      color: white;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+  /* WELCOME */
+  .welcome-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; text-align: center; padding: 40px; }
+  .welcome-screen .robot { font-size: 56px; margin-bottom: 16px; }
+  .welcome-screen h3 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 8px; }
+  .welcome-screen p { font-size: 15px; color: #888; }
 
-    .status-dot {
-      width: 10px; height: 10px;
-      background: #4ade80;
-      border-radius: 50%;
-    }
+  /* MESSAGES */
+  .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; display: none; }
+  .msg { display: flex; flex-direction: column; max-width: 75%; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.ai { align-self: flex-start; align-items: flex-start; }
+  .msg-bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+  .msg.user .msg-bubble { background: #6366f1; color: #fff; border-bottom-right-radius: 4px; }
+  .msg.ai .msg-bubble { background: #f4f4f5; color: #111; border-bottom-left-radius: 4px; }
+  .msg-time { font-size: 11px; color: #bbb; margin-top: 4px; }
+  .typing { display: none; align-self: flex-start; }
+  .typing .msg-bubble { background: #f4f4f5; color: #999; font-style: italic; }
 
-    .chat-header h2 { font-size: 16px; font-weight: 600; }
-    .chat-header p { font-size: 12px; opacity: 0.6; }
+  /* INPUT */
+  .input-area { padding: 16px 20px; border-top: 1px solid #eee; background: #fff; }
+  .input-row { display: flex; gap: 10px; align-items: center; }
+  .file-btn { background: none; border: 1.5px solid #eee; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-size: 18px; color: #666; transition: all 0.2s; }
+  .file-btn:hover { border-color: #6366f1; color: #6366f1; }
+  #messageInput { flex: 1; padding: 12px 16px; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; outline: none; resize: none; font-family: inherit; transition: border 0.2s; }
+  #messageInput:focus { border-color: #6366f1; }
+  .send-btn { background: #6366f1; color: #fff; border: none; border-radius: 12px; padding: 12px 18px; cursor: pointer; font-size: 18px; transition: background 0.2s; }
+  .send-btn:hover { background: #4f46e5; }
+  #fileInput { display: none; }
 
-    /* File badge */
-    .file-badge {
-      margin-left: auto;
-      background: #22c55e22;
-      color: #22c55e;
-      border: 1px solid #22c55e55;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      display: none;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .file-badge.visible { display: flex; }
-
-    .file-badge button {
-      background: none;
-      border: none;
-      color: #22c55e;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 0;
-    }
-
-    /* Messages */
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    /* Welcome screen */
-    .welcome {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: #888;
-      gap: 12px;
-    }
-
-    .welcome .icon { font-size: 48px; }
-    .welcome h1 { font-size: 24px; color: #1a1a2e; font-weight: 700; }
-    .welcome p { font-size: 14px; max-width: 300px; line-height: 1.6; }
-
-    /* Bubbles */
-    .message { display: flex; gap: 10px; max-width: 85%; }
-    .message.user { align-self: flex-end; flex-direction: row-reverse; }
-
-    .bubble {
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .message.user .bubble {
-      background: #1a1a2e;
-      color: white;
-      border-bottom-right-radius: 4px;
-    }
-
-    .message.ai .bubble {
-      background: #f1f3f5;
-      color: #1a1a2e;
-      border-bottom-left-radius: 4px;
-    }
-
-    .avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .message.user .avatar { background: #1a1a2e; color: white; font-size: 13px; }
-    .message.ai .avatar { background: #e8e8f0; }
-
-    /* Typing */
-    .typing-indicator {
-      display: flex; gap: 5px; align-items: center;
-      padding: 12px 16px;
-      background: #f1f3f5;
-      border-radius: 16px;
-      border-bottom-left-radius: 4px;
-      width: fit-content;
-    }
-
-    .typing-indicator span {
-      width: 7px; height: 7px;
-      background: #aaa;
-      border-radius: 50%;
-      animation: bounce 1.2s infinite;
-    }
-
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-6px); }
-    }
-
-    /* Input area */
-    .chat-input-area {
-      padding: 14px 16px;
-      border-top: 1px solid #e8e8e8;
-      background: white;
-    }
-
-    /* Upload preview bar */
-    .upload-preview {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin-bottom: 10px;
-      font-size: 13px;
-      color: #166534;
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .upload-preview.visible { display: flex; }
-    .upload-preview span { flex: 1; }
-
-    .upload-preview button {
-      background: none;
-      border: none;
-      color: #166534;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-    }
-
-    /* File upload button */
-    .upload-btn {
-      background: #f1f3f5;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 10px 12px;
-      cursor: pointer;
-      font-size: 18px;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-
-    .upload-btn:hover { background: #e2e6ea; }
-
-    #file-input { display: none; }
-
-    textarea {
-      flex: 1;
-      padding: 10px 14px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 14px;
-      font-family: inherit;
-      resize: none;
-      outline: none;
-      transition: border 0.2s;
-      max-height: 120px;
-    }
-
-    textarea:focus { border-color: #1a1a2e; }
-
-    .send-btn {
-      background: #1a1a2e;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      flex-shrink: 0;
-    }
-
-    .send-btn:hover { opacity: 0.85; }
-
-    .hint {
-      font-size: 11px;
-      color: #aaa;
-      text-align: center;
-      margin-top: 8px;
-    }
-  </style>
+  @media (max-width: 600px) {
+    .chat-wrapper { max-width: 100%; }
+    .msg { max-width: 90%; }
+  }
+</style>
 </head>
 <body>
 
-<div class="chat-container">
+<!-- LOGIN PAGE -->
+<div class="auth-wrapper" id="loginPage">
+  <div class="auth-card">
+    <h1>Login</h1>
+    <div class="auth-error" id="loginError"></div>
+    <div class="auth-success" id="loginSuccess"></div>
+    <label>Email</label>
+    <input type="email" id="loginEmail" placeholder="you@example.com" />
+    <label>Password</label>
+    <input type="password" id="loginPassword" placeholder="••••••••" />
+    <button class="auth-btn" onclick="login()">Log In</button>
+    <div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
+  </div>
+</div>
 
-  <!-- Header -->
+<!-- SIGNUP PAGE -->
+<div class="auth-wrapper" id="signupPage" style="display:none">
+  <div class="auth-card">
+    <h1>Signup</h1>
+    <div class="auth-error" id="signupError"></div>
+    <div class="auth-success" id="signupSuccess"></div>
+    <label>Email</label>
+    <input type="email" id="signupEmail" placeholder="you@example.com" />
+    <label>Password</label>
+    <input type="password" id="signupPassword" placeholder="Min 6 characters" />
+    <button class="auth-btn" onclick="signup()">Create Account</button>
+    <div class="auth-switch">Already have an account? <a onclick="showLogin()">Log in</a></div>
+  </div>
+</div>
+
+<!-- CHAT PAGE -->
+<div class="chat-wrapper" id="chatPage">
   <div class="chat-header">
-    <div class="status-dot"></div>
-    <div>
-      <h2>AI Assistant</h2>
-      <p>Online</p>
+    <div class="chat-header-left">
+      <div class="status-dot"></div>
+      <div>
+        <h2>AI Chatbot</h2>
+        <div class="user-email" id="userEmailDisplay"></div>
+      </div>
     </div>
-    <div class="file-badge" id="file-badge">
-      📄 <span id="badge-name"></span>
-      <button onclick="clearFile()" title="Remove file">✕</button>
-    </div>
-  </div>
-
-  <!-- Messages -->
-  <div class="chat-messages" id="chat-messages">
-    <div class="welcome" id="welcome-screen">
-      <div class="icon">🤖</div>
-      <h1>How can I help you?</h1>
-      <p>Ask me anything, or upload a PDF / Word / TXT file and ask questions about it.</p>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="file-badge" id="fileBadge">
+        <span id="fileName">file.pdf</span>
+        <button onclick="clearFile()">✕</button>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </div>
 
-  <!-- Input -->
-  <div class="chat-input-area">
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="robot">🤖</div>
+    <h3>How can I help you?</h3>
+    <p>Ask me anything about programming, robotics, or AI.</p>
+  </div>
 
-    <!-- Upload preview -->
-    <div class="upload-preview" id="upload-preview">
-      📄 <span id="preview-name"></span>
-      <button onclick="clearFile()">✕</button>
+  <div class="messages" id="messages">
+    <div class="typing msg ai" id="typing">
+      <div class="msg-bubble">Thinking...</div>
     </div>
+  </div>
 
+  <div class="input-area">
     <div class="input-row">
-      <label class="upload-btn" for="file-input" title="Upload file">📎</label>
-      <input type="file" id="file-input" accept=".pdf,.docx,.txt" onchange="handleFileUpload(event)" />
-
-      <textarea
-        id="user-input"
-        rows="1"
-        placeholder="Type a message..."
-        onkeydown="handleKey(event)"
-        oninput="autoResize(this)"
-      ></textarea>
-
+      <button class="file-btn" onclick="document.getElementById('fileInput').click()" title="Upload file">📎</button>
+      <input type="file" id="fileInput" accept=".pdf,.docx,.txt" onchange="uploadFile(this)" />
+      <textarea id="messageInput" rows="1" placeholder="Type a message..." onkeydown="handleKey(event)"></textarea>
       <button class="send-btn" onclick="sendMessage()">➤</button>
     </div>
-
-    <div class="hint">Press Enter to send &nbsp;·&nbsp; Shift+Enter for new line</div>
   </div>
 </div>
 
 <script>
-  const BACKEND_URL = "https://chatbot-backend-production-182b.up.railway.app";
-  const SESSION_ID = "user_" + Math.random().toString(36).substr(2, 9);
+const BACKEND = "https://chatbot-backend-production-182b.up.railway.app";
+let currentUser = null;
 
-  let welcomeVisible = true;
-  let uploadedFileName = null;
+// ---- AUTH ----
+function showSignup() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('signupPage').style.display = 'flex';
+}
+function showLogin() {
+  document.getElementById('signupPage').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+}
 
-  function hideWelcome() {
-    if (welcomeVisible) {
-      document.getElementById("welcome-screen").style.display = "none";
-      welcomeVisible = false;
+async function signup() {
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const errEl = document.getElementById('signupError');
+  const okEl = document.getElementById('signupSuccess');
+  errEl.style.display = 'none'; okEl.style.display = 'none';
+
+  if (!email || !password) { errEl.textContent = 'Please fill all fields.'; errEl.style.display = 'block'; return; }
+  if (password.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.style.display = 'block'; return; }
+
+  try {
+    const res = await fetch(`${BACKEND}/signup`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password})
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.detail || 'Signup failed.'; errEl.style.display = 'block'; return; }
+    okEl.textContent = 'Account created! Logging you in...'; okEl.style.display = 'block';
+    setTimeout(() => enterChat(data), 1000);
+  } catch(e) { errEl.textContent = 'Could not connect to server.'; errEl.style.display = 'block'; }
+}
+
+async function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  if (!email || !password) { errEl.textContent = 'Please fill all fields.'; errEl.style.display = 'block'; return; }
+
+  try {
+    const res = await fetch(`${BACKEND}/login`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password})
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.detail || 'Login failed.'; errEl.style.display = 'block'; return; }
+    enterChat(data);
+  } catch(e) { errEl.textContent = 'Could not connect to server.'; errEl.style.display = 'block'; }
+}
+
+function enterChat(user) {
+  currentUser = user;
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('signupPage').style.display = 'none';
+  document.getElementById('chatPage').style.flex = '1';
+  document.getElementById('chatPage').style.display = 'flex';
+  document.getElementById('userEmailDisplay').textContent = user.email;
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('chatPage').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('messages').innerHTML = `<div class="typing msg ai" id="typing"><div class="msg-bubble">Thinking...</div></div>`;
+  document.getElementById('welcomeScreen').style.display = 'flex';
+  document.getElementById('messages').style.display = 'none';
+  document.getElementById('fileBadge').style.display = 'none';
+}
+
+// ---- CHAT ----
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function timeNow() {
+  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+function addMsg(text, role) {
+  const msgs = document.getElementById('messages');
+  const typing = document.getElementById('typing');
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${timeNow()}</div>`;
+  msgs.insertBefore(div, typing);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('messageInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  // Hide welcome, show messages
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('messages').style.display = 'flex';
+
+  addMsg(msg, 'user');
+  document.getElementById('typing').style.display = 'flex';
+
+  try {
+    const res = await fetch(`${BACKEND}/chat`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({message: msg, user_id: currentUser?.user_id || 'default'})
+    });
+    const data = await res.json();
+    document.getElementById('typing').style.display = 'none';
+    addMsg(data.reply || 'Error.', 'ai');
+  } catch(e) {
+    document.getElementById('typing').style.display = 'none';
+    addMsg('Could not connect to server.', 'ai');
+  }
+}
+
+async function uploadFile(input) {
+  if (!input.files[0]) return;
+  const formData = new FormData();
+  formData.append('file', input.files[0]);
+  formData.append('user_id', currentUser?.user_id || 'default');
+
+  try {
+    const res = await fetch(`${BACKEND}/upload`, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (res.ok) {
+      document.getElementById('fileName').textContent = input.files[0].name;
+      document.getElementById('fileBadge').style.display = 'flex';
+      addMsg(`📎 File "${input.files[0].name}" uploaded! Ab is file ke baare mein poocho.`, 'ai');
+      document.getElementById('welcomeScreen').style.display = 'none';
+      document.getElementById('messages').style.display = 'flex';
     }
-  }
+  } catch(e) { alert('File upload failed.'); }
+  input.value = '';
+}
 
-  function autoResize(el) {
-    el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 120) + "px";
-  }
-
-  function handleKey(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  }
-
-  function appendMessage(role, text) {
-    hideWelcome();
-    const container = document.getElementById("chat-messages");
-
-    const wrapper = document.createElement("div");
-    wrapper.className = `message ${role}`;
-
-    const avatar = document.createElement("div");
-    avatar.className = "avatar";
-    avatar.textContent = role === "user" ? "You" : "🤖";
-
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.textContent = text;
-
-    wrapper.appendChild(avatar);
-    wrapper.appendChild(bubble);
-    container.appendChild(wrapper);
-    container.scrollTop = container.scrollHeight;
-  }
-
-  function showTyping() {
-    const container = document.getElementById("chat-messages");
-    const el = document.createElement("div");
-    el.className = "message ai";
-    el.id = "typing";
-    el.innerHTML = `<div class="avatar">🤖</div><div class="typing-indicator"><span></span><span></span><span></span></div>`;
-    container.appendChild(el);
-    container.scrollTop = container.scrollHeight;
-  }
-
-  function hideTyping() {
-    const el = document.getElementById("typing");
-    if (el) el.remove();
-  }
-
-  async function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // Show uploading state
-    appendMessage("ai", `Uploading "${file.name}"...`);
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/upload?session_id=${SESSION_ID}`, {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.detail || "Upload failed");
-
-      uploadedFileName = file.name;
-
-      // Update UI
-      document.getElementById("upload-preview").classList.add("visible");
-      document.getElementById("preview-name").textContent = file.name;
-      document.getElementById("file-badge").classList.add("visible");
-      document.getElementById("badge-name").textContent = file.name;
-
-      appendMessage("ai", `✅ "${file.name}" uploaded! Now ask me anything about this file.`);
-
-    } catch (err) {
-      appendMessage("ai", `❌ Upload failed: ${err.message}`);
-    }
-
-    event.target.value = "";
-  }
-
-  function clearFile() {
-    uploadedFileName = null;
-    document.getElementById("upload-preview").classList.remove("visible");
-    document.getElementById("file-badge").classList.remove("visible");
-
-    fetch(`${BACKEND_URL}/clear/${SESSION_ID}`, { method: "DELETE" });
-    appendMessage("ai", "File removed. Back to normal chat mode.");
-  }
-
-  async function sendMessage() {
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
-    if (!message) return;
-
-    input.value = "";
-    input.style.height = "auto";
-
-    appendMessage("user", message);
-    showTyping();
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, session_id: SESSION_ID })
-      });
-
-      const data = await res.json();
-      hideTyping();
-
-      if (!res.ok) throw new Error(data.detail || "Error");
-
-      appendMessage("ai", data.reply);
-
-    } catch (err) {
-      hideTyping();
-      appendMessage("ai", "Error: Could not connect to server.");
-    }
-  }
+async function clearFile() {
+  await fetch(`${BACKEND}/clear-file/${currentUser?.user_id || 'default'}`, { method: 'DELETE' });
+  document.getElementById('fileBadge').style.display = 'none';
+}
 </script>
-
 </body>
 </html>
