@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AI Chatbot</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
 
-  /* AUTH PAGES */
-  .auth-wrapper { width: 100%; max-width: 420px; padding: 20px; }
-  .auth-card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-  .auth-card h1 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 28px; text-align: center; }
-  .auth-card p { color: #666; font-size: 14px; margin-bottom: 28px; }
-  .auth-card label { display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px; }
-  .auth-card input { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; margin-bottom: 16px; }
-  .auth-card input:focus { border-color: #6366f1; }
-  .auth-btn { width: 100%; padding: 12px; background: #6366f1; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-  .auth-btn:hover { background: #4f46e5; }
-  .auth-switch { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
-  .auth-switch a { color: #6366f1; font-weight: 500; cursor: pointer; text-decoration: none; }
-  .auth-switch a:hover { text-decoration: underline; }
-  .auth-error { background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
-  .auth-success { background: #f0fdf4; border: 1px solid #86efac; color: #16a34a; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+/* AUTH */
+.auth-wrapper { width: 100%; max-width: 420px; padding: 20px; }
+.auth-card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+.auth-card h1 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 28px; text-align: center; }
+.auth-card label { display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px; }
+.auth-card input { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; margin-bottom: 16px; font-family: inherit; }
+.auth-card input:focus { border-color: #6366f1; }
+.auth-btn { width: 100%; padding: 12px; background: #6366f1; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.auth-btn:hover { background: #4f46e5; }
+.auth-btn:disabled { background: #a5b4fc; cursor: not-allowed; }
+.auth-switch { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+.auth-switch a { color: #6366f1; font-weight: 500; cursor: pointer; }
+.auth-switch a:hover { text-decoration: underline; }
+.auth-error { background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+.auth-success { background: #f0fdf4; border: 1px solid #86efac; color: #16a34a; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
 
-  /* CHAT PAGE */
-  .chat-wrapper { display: none; width: 100%; max-width: 720px; height: 100vh; flex-direction: column; background: #fff; }
-  .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #eee; background: #fff; }
-  .chat-header-left { display: flex; align-items: center; gap: 10px; }
-  .status-dot { width: 9px; height: 9px; background: #22c55e; border-radius: 50%; }
-  .chat-header h2 { font-size: 16px; font-weight: 600; color: #111; }
-  .user-email { font-size: 13px; color: #888; }
-  .logout-btn { background: none; border: 1.5px solid #eee; padding: 6px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; color: #666; transition: all 0.2s; }
-  .logout-btn:hover { border-color: #dc2626; color: #dc2626; }
-  .file-badge { background: #ecfdf5; border: 1px solid #86efac; color: #16a34a; font-size: 12px; padding: 4px 10px; border-radius: 20px; display: none; align-items: center; gap: 6px; }
-  .file-badge button { background: none; border: none; cursor: pointer; color: #16a34a; font-size: 14px; line-height: 1; }
+/* OTP inputs */
+.otp-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+.otp-row input { width: 48px; height: 54px; text-align: center; font-size: 22px; font-weight: 700; border: 1.5px solid #ddd; border-radius: 10px; outline: none; transition: border 0.2s; padding: 0; }
+.otp-row input:focus { border-color: #6366f1; }
+.otp-hint { text-align: center; font-size: 13px; color: #888; margin-bottom: 20px; }
+.resend-link { text-align: center; font-size: 13px; color: #666; margin-top: 14px; }
+.resend-link a { color: #6366f1; cursor: pointer; font-weight: 500; }
+.resend-link a:hover { text-decoration: underline; }
+.back-link { text-align: center; font-size: 13px; color: #888; margin-top: 10px; cursor: pointer; }
+.back-link:hover { color: #6366f1; }
 
-  /* WELCOME */
-  .welcome-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; text-align: center; padding: 40px; }
-  .welcome-screen .robot { font-size: 56px; margin-bottom: 16px; }
-  .welcome-screen h3 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 8px; }
-  .welcome-screen p { font-size: 15px; color: #888; }
-
-  /* MESSAGES */
-  .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; display: none; }
-  .msg { display: flex; flex-direction: column; max-width: 75%; }
-  .msg.user { align-self: flex-end; align-items: flex-end; }
-  .msg.ai { align-self: flex-start; align-items: flex-start; }
-  .msg-bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
-  .msg.user .msg-bubble { background: #6366f1; color: #fff; border-bottom-right-radius: 4px; }
-  .msg.ai .msg-bubble { background: #f4f4f5; color: #111; border-bottom-left-radius: 4px; }
-  .msg-time { font-size: 11px; color: #bbb; margin-top: 4px; }
-  .typing { display: none; align-self: flex-start; }
-  .typing .msg-bubble { background: #f4f4f5; color: #999; font-style: italic; }
-
-  /* INPUT */
-  .input-area { padding: 16px 20px; border-top: 1px solid #eee; background: #fff; }
-  .input-row { display: flex; gap: 10px; align-items: center; }
-  .file-btn { background: none; border: 1.5px solid #eee; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-size: 18px; color: #666; transition: all 0.2s; }
-  .file-btn:hover { border-color: #6366f1; color: #6366f1; }
-  #messageInput { flex: 1; padding: 12px 16px; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; outline: none; resize: none; font-family: inherit; transition: border 0.2s; }
-  #messageInput:focus { border-color: #6366f1; }
-  .send-btn { background: #6366f1; color: #fff; border: none; border-radius: 12px; padding: 12px 18px; cursor: pointer; font-size: 18px; transition: background 0.2s; }
-  .send-btn:hover { background: #4f46e5; }
-  #fileInput { display: none; }
-
-  @media (max-width: 600px) {
-    .chat-wrapper { max-width: 100%; }
-    .msg { max-width: 90%; }
-  }
+/* CHAT */
+.chat-wrapper { display: none; width: 100%; max-width: 720px; height: 100vh; flex-direction: column; background: #fff; }
+.chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #eee; }
+.chat-header-left { display: flex; align-items: center; gap: 10px; }
+.status-dot { width: 9px; height: 9px; background: #22c55e; border-radius: 50%; }
+.chat-header h2 { font-size: 16px; font-weight: 600; color: #111; }
+.user-email { font-size: 13px; color: #888; }
+.logout-btn { background: none; border: 1.5px solid #eee; padding: 6px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; color: #666; transition: all 0.2s; }
+.logout-btn:hover { border-color: #dc2626; color: #dc2626; }
+.file-badge { background: #ecfdf5; border: 1px solid #86efac; color: #16a34a; font-size: 12px; padding: 4px 10px; border-radius: 20px; display: none; align-items: center; gap: 6px; }
+.file-badge button { background: none; border: none; cursor: pointer; color: #16a34a; font-size: 14px; }
+.welcome-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
+.welcome-screen .robot { font-size: 56px; margin-bottom: 16px; }
+.welcome-screen h3 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 8px; }
+.welcome-screen p { font-size: 15px; color: #888; }
+.messages { flex: 1; overflow-y: auto; padding: 20px; flex-direction: column; gap: 14px; display: none; }
+.msg { display: flex; flex-direction: column; max-width: 75%; }
+.msg.user { align-self: flex-end; align-items: flex-end; }
+.msg.ai { align-self: flex-start; align-items: flex-start; }
+.msg-bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+.msg.user .msg-bubble { background: #6366f1; color: #fff; border-bottom-right-radius: 4px; }
+.msg.ai .msg-bubble { background: #f4f4f5; color: #111; border-bottom-left-radius: 4px; }
+.msg-time { font-size: 11px; color: #bbb; margin-top: 4px; }
+.typing { display: none; align-self: flex-start; }
+.typing .msg-bubble { background: #f4f4f5; color: #999; font-style: italic; }
+.input-area { padding: 16px 20px; border-top: 1px solid #eee; }
+.input-row { display: flex; gap: 10px; align-items: center; }
+.file-btn { background: none; border: 1.5px solid #eee; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-size: 18px; color: #666; transition: all 0.2s; }
+.file-btn:hover { border-color: #6366f1; color: #6366f1; }
+#messageInput { flex: 1; padding: 12px 16px; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; outline: none; resize: none; font-family: inherit; transition: border 0.2s; }
+#messageInput:focus { border-color: #6366f1; }
+.send-btn { background: #6366f1; color: #fff; border: none; border-radius: 12px; padding: 12px 18px; cursor: pointer; font-size: 18px; transition: background 0.2s; }
+.send-btn:hover { background: #4f46e5; }
+#fileInput { display: none; }
 </style>
 </head>
 <body>
@@ -81,11 +81,31 @@
     <div class="auth-error" id="loginError"></div>
     <div class="auth-success" id="loginSuccess"></div>
     <label>Email</label>
-    <input type="email" id="loginEmail" placeholder="you@example.com" />
+    <input type="email" id="loginEmail" placeholder="you@example.com"/>
     <label>Password</label>
-    <input type="password" id="loginPassword" placeholder="••••••••" />
-    <button class="auth-btn" onclick="login()">Log In</button>
+    <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter') loginSendOtp()"/>
+    <button class="auth-btn" id="loginBtn" onclick="loginSendOtp()">Send OTP</button>
     <div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
+  </div>
+</div>
+
+<!-- LOGIN OTP PAGE -->
+<div class="auth-wrapper" id="loginOtpPage" style="display:none">
+  <div class="auth-card">
+    <h1>Login</h1>
+    <div class="auth-error" id="loginOtpError"></div>
+    <p class="otp-hint">Enter the 6-digit OTP sent to <b id="loginOtpEmail"></b></p>
+    <div class="otp-row" id="loginOtpRow">
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow',true)" onkeydown="otpBack(event,this,'loginOtpRow')"/>
+    </div>
+    <button class="auth-btn" id="loginVerifyBtn" onclick="loginVerifyOtp()">Verify & Login</button>
+    <div class="resend-link">Didn't receive? <a onclick="loginSendOtp(true)">Resend OTP</a></div>
+    <div class="back-link" onclick="showPage('loginPage')">← Back to Login</div>
   </div>
 </div>
 
@@ -96,11 +116,31 @@
     <div class="auth-error" id="signupError"></div>
     <div class="auth-success" id="signupSuccess"></div>
     <label>Email</label>
-    <input type="email" id="signupEmail" placeholder="you@example.com" />
+    <input type="email" id="signupEmail" placeholder="you@example.com"/>
     <label>Password</label>
-    <input type="password" id="signupPassword" placeholder="Min 6 characters" />
-    <button class="auth-btn" onclick="signup()">Create Account</button>
+    <input type="password" id="signupPassword" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter') signupSendOtp()"/>
+    <button class="auth-btn" id="signupBtn" onclick="signupSendOtp()">Send OTP</button>
     <div class="auth-switch">Already have an account? <a onclick="showLogin()">Log in</a></div>
+  </div>
+</div>
+
+<!-- SIGNUP OTP PAGE -->
+<div class="auth-wrapper" id="signupOtpPage" style="display:none">
+  <div class="auth-card">
+    <h1>Signup</h1>
+    <div class="auth-error" id="signupOtpError"></div>
+    <p class="otp-hint">Enter the 6-digit OTP sent to <b id="signupOtpEmail"></b></p>
+    <div class="otp-row" id="signupOtpRow">
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow',true)" onkeydown="otpBack(event,this,'signupOtpRow')"/>
+    </div>
+    <button class="auth-btn" id="signupVerifyBtn" onclick="signupVerifyOtp()">Verify & Create Account</button>
+    <div class="resend-link">Didn't receive? <a onclick="signupSendOtp(true)">Resend OTP</a></div>
+    <div class="back-link" onclick="showPage('signupPage')">← Back to Signup</div>
   </div>
 </div>
 
@@ -116,29 +156,26 @@
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
       <div class="file-badge" id="fileBadge">
-        <span id="fileName">file.pdf</span>
+        <span id="fileName"></span>
         <button onclick="clearFile()">✕</button>
       </div>
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </div>
-
   <div class="welcome-screen" id="welcomeScreen">
     <div class="robot">🤖</div>
     <h3>How can I help you?</h3>
     <p>Ask me anything about programming, robotics, or AI.</p>
   </div>
-
   <div class="messages" id="messages">
     <div class="typing msg ai" id="typing">
       <div class="msg-bubble">Thinking...</div>
     </div>
   </div>
-
   <div class="input-area">
     <div class="input-row">
       <button class="file-btn" onclick="document.getElementById('fileInput').click()" title="Upload file">📎</button>
-      <input type="file" id="fileInput" accept=".pdf,.docx,.txt" onchange="uploadFile(this)" />
+      <input type="file" id="fileInput" accept=".pdf,.docx,.txt" onchange="uploadFile(this)"/>
       <textarea id="messageInput" rows="1" placeholder="Type a message..." onkeydown="handleKey(event)"></textarea>
       <button class="send-btn" onclick="sendMessage()">➤</button>
     </div>
@@ -148,90 +185,174 @@
 <script>
 const BACKEND = "https://chatbot-backend-production-182b.up.railway.app";
 let currentUser = null;
+let pendingEmail = null;
 
-// ---- AUTH ----
-function showSignup() {
-  document.getElementById('loginPage').style.display = 'none';
-  document.getElementById('signupPage').style.display = 'flex';
+// ── Page navigation ──────────────────────────────────────
+function showPage(id) {
+  ['loginPage','loginOtpPage','signupPage','signupOtpPage'].forEach(p => {
+    document.getElementById(p).style.display = 'none';
+  });
+  document.getElementById(id).style.display = 'flex';
 }
-function showLogin() {
-  document.getElementById('signupPage').style.display = 'none';
-  document.getElementById('loginPage').style.display = 'flex';
+function showSignup() { clearErrors(); showPage('signupPage'); }
+function showLogin()  { clearErrors(); showPage('loginPage'); }
+function clearErrors() {
+  ['loginError','loginSuccess','signupError','signupSuccess','loginOtpError','signupOtpError'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.style.display = 'none'; el.textContent = ''; }
+  });
 }
 
-async function signup() {
-  const email = document.getElementById('signupEmail').value.trim();
-  const password = document.getElementById('signupPassword').value;
-  const errEl = document.getElementById('signupError');
-  const okEl = document.getElementById('signupSuccess');
-  errEl.style.display = 'none'; okEl.style.display = 'none';
+// ── OTP box helpers ──────────────────────────────────────
+function otpInput(el, rowId, isLast = false) {
+  const inputs = document.getElementById(rowId).querySelectorAll('input');
+  const idx = Array.from(inputs).indexOf(el);
+  if (el.value && idx < inputs.length - 1) inputs[idx + 1].focus();
+  if (isLast && el.value) {
+    if (rowId === 'loginOtpRow') loginVerifyOtp();
+    else signupVerifyOtp();
+  }
+}
+function otpBack(e, el, rowId) {
+  if (e.key === 'Backspace' && !el.value) {
+    const inputs = document.getElementById(rowId).querySelectorAll('input');
+    const idx = Array.from(inputs).indexOf(el);
+    if (idx > 0) inputs[idx - 1].focus();
+  }
+}
+function getOtp(rowId) {
+  return Array.from(document.getElementById(rowId).querySelectorAll('input')).map(i => i.value).join('');
+}
+function clearOtp(rowId) {
+  document.getElementById(rowId).querySelectorAll('input').forEach(i => i.value = '');
+  document.getElementById(rowId).querySelector('input').focus();
+}
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = 'block';
+}
+function showOk(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = 'block';
+}
 
-  if (!email || !password) { errEl.textContent = 'Please fill all fields.'; errEl.style.display = 'block'; return; }
-  if (password.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.style.display = 'block'; return; }
+// ── SIGNUP ───────────────────────────────────────────────
+async function signupSendOtp(resend = false) {
+  const email = resend ? pendingEmail : document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword')?.value || '';
+  clearErrors();
+  if (!resend && (!email || !password)) { showErr('signupError','Please fill all fields.'); return; }
+  if (!resend && password.length < 6) { showErr('signupError','Password must be at least 6 characters.'); return; }
+
+  const btn = document.getElementById('signupBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
 
   try {
-    const res = await fetch(`${BACKEND}/signup`, {
+    const res = await fetch(`${BACKEND}/signup/send-otp`, {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({email, password})
+      body: JSON.stringify({email, password: resend ? '________' : password})
     });
     const data = await res.json();
-    if (!res.ok) { errEl.textContent = data.detail || 'Signup failed.'; errEl.style.display = 'block'; return; }
-    okEl.textContent = 'Account created! Logging you in...'; okEl.style.display = 'block';
-    setTimeout(() => enterChat(data), 1000);
-  } catch(e) { errEl.textContent = 'Could not connect to server.'; errEl.style.display = 'block'; }
+    if (!res.ok) { showErr('signupError', data.detail || 'Failed'); if(btn){btn.disabled=false;btn.textContent='Send OTP';} return; }
+    pendingEmail = email;
+    document.getElementById('signupOtpEmail').textContent = email;
+    showPage('signupOtpPage');
+    if (resend) showOk('signupOtpError', 'New OTP sent!');
+  } catch(e) { showErr('signupError','Cannot connect to server.'); }
+  if(btn){btn.disabled=false;btn.textContent='Send OTP';}
 }
 
-async function login() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const errEl = document.getElementById('loginError');
-  errEl.style.display = 'none';
+async function signupVerifyOtp() {
+  const otp = getOtp('signupOtpRow');
+  clearErrors();
+  if (otp.length < 6) { showErr('signupOtpError','Enter complete 6-digit OTP.'); return; }
 
-  if (!email || !password) { errEl.textContent = 'Please fill all fields.'; errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('signupVerifyBtn');
+  btn.disabled = true; btn.textContent = 'Verifying...';
 
   try {
-    const res = await fetch(`${BACKEND}/login`, {
+    const res = await fetch(`${BACKEND}/signup/verify-otp`, {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({email, password})
+      body: JSON.stringify({email: pendingEmail, otp})
     });
     const data = await res.json();
-    if (!res.ok) { errEl.textContent = data.detail || 'Login failed.'; errEl.style.display = 'block'; return; }
+    if (!res.ok) { showErr('signupOtpError', data.detail || 'Invalid OTP'); clearOtp('signupOtpRow'); btn.disabled=false; btn.textContent='Verify & Create Account'; return; }
     enterChat(data);
-  } catch(e) { errEl.textContent = 'Could not connect to server.'; errEl.style.display = 'block'; }
+  } catch(e) { showErr('signupOtpError','Cannot connect to server.'); }
+  btn.disabled=false; btn.textContent='Verify & Create Account';
 }
 
+// ── LOGIN ────────────────────────────────────────────────
+async function loginSendOtp(resend = false) {
+  const email = resend ? pendingEmail : document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword')?.value || '';
+  clearErrors();
+  if (!resend && (!email || !password)) { showErr('loginError','Please fill all fields.'); return; }
+
+  const btn = document.getElementById('loginBtn');
+  if(btn){btn.disabled=true; btn.textContent='Sending...';}
+
+  try {
+    const res = await fetch(`${BACKEND}/login/send-otp`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email, password: resend ? '________' : password})
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr('loginError', data.detail || 'Failed'); if(btn){btn.disabled=false;btn.textContent='Send OTP';} return; }
+    pendingEmail = email;
+    document.getElementById('loginOtpEmail').textContent = email;
+    showPage('loginOtpPage');
+    if (resend) showOk('loginOtpError','New OTP sent!');
+  } catch(e) { showErr('loginError','Cannot connect to server.'); }
+  if(btn){btn.disabled=false;btn.textContent='Send OTP';}
+}
+
+async function loginVerifyOtp() {
+  const otp = getOtp('loginOtpRow');
+  clearErrors();
+  if (otp.length < 6) { showErr('loginOtpError','Enter complete 6-digit OTP.'); return; }
+
+  const btn = document.getElementById('loginVerifyBtn');
+  btn.disabled = true; btn.textContent = 'Verifying...';
+
+  try {
+    const res = await fetch(`${BACKEND}/login/verify-otp`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email: pendingEmail, otp})
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr('loginOtpError', data.detail || 'Invalid OTP'); clearOtp('loginOtpRow'); btn.disabled=false; btn.textContent='Verify & Login'; return; }
+    enterChat(data);
+  } catch(e) { showErr('loginOtpError','Cannot connect to server.'); }
+  btn.disabled=false; btn.textContent='Verify & Login';
+}
+
+// ── CHAT ─────────────────────────────────────────────────
 function enterChat(user) {
   currentUser = user;
-  document.getElementById('loginPage').style.display = 'none';
-  document.getElementById('signupPage').style.display = 'none';
-  document.getElementById('chatPage').style.flex = '1';
   document.getElementById('chatPage').style.display = 'flex';
+  ['loginPage','loginOtpPage','signupPage','signupOtpPage'].forEach(p => document.getElementById(p).style.display = 'none');
   document.getElementById('userEmailDisplay').textContent = user.email;
 }
 
 function logout() {
-  currentUser = null;
+  currentUser = null; pendingEmail = null;
   document.getElementById('chatPage').style.display = 'none';
-  document.getElementById('loginPage').style.display = 'flex';
   document.getElementById('messages').innerHTML = `<div class="typing msg ai" id="typing"><div class="msg-bubble">Thinking...</div></div>`;
   document.getElementById('welcomeScreen').style.display = 'flex';
   document.getElementById('messages').style.display = 'none';
   document.getElementById('fileBadge').style.display = 'none';
+  showPage('loginPage');
 }
 
-// ---- CHAT ----
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
-
-function timeNow() {
-  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-}
+function timeNow() { return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
 
 function addMsg(text, role) {
   const msgs = document.getElementById('messages');
   const typing = document.getElementById('typing');
-
   const div = document.createElement('div');
   div.className = `msg ${role}`;
   div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${timeNow()}</div>`;
@@ -244,14 +365,10 @@ async function sendMessage() {
   const msg = input.value.trim();
   if (!msg) return;
   input.value = '';
-
-  // Hide welcome, show messages
   document.getElementById('welcomeScreen').style.display = 'none';
   document.getElementById('messages').style.display = 'flex';
-
   addMsg(msg, 'user');
   document.getElementById('typing').style.display = 'flex';
-
   try {
     const res = await fetch(`${BACKEND}/chat`, {
       method: 'POST', headers: {'Content-Type':'application/json'},
@@ -271,26 +388,23 @@ async function uploadFile(input) {
   const userId = currentUser?.user_id || 'default';
   const formData = new FormData();
   formData.append('file', input.files[0]);
-
   try {
-    const res = await fetch(`${BACKEND}/upload?user_id=${encodeURIComponent(userId)}`, { method: 'POST', body: formData });
+    const res = await fetch(`${BACKEND}/upload?user_id=${encodeURIComponent(userId)}`, {method:'POST', body: formData});
     const data = await res.json();
     if (res.ok) {
       document.getElementById('fileName').textContent = input.files[0].name;
       document.getElementById('fileBadge').style.display = 'flex';
       document.getElementById('welcomeScreen').style.display = 'none';
       document.getElementById('messages').style.display = 'flex';
-      addMsg(`📎 File "<b>${input.files[0].name}</b>" File uploaded. Ask anything about this file`, 'ai');
-    } else {
-      alert(data.detail || 'File upload failed.');
-    }
-  } catch(e) { alert('File upload failed. Server se connect nahi ho saka.'); }
+      addMsg(`📎 File "<b>${input.files[0].name}</b>" upload ho gayi! Ab is file ke baare mein kuch bhi poocho.`, 'ai');
+    } else { alert(data.detail || 'Upload failed.'); }
+  } catch(e) { alert('File upload failed.'); }
   input.value = '';
 }
 
 async function clearFile() {
   const userId = currentUser?.user_id || 'default';
-  await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, { method: 'DELETE' });
+  await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
   document.getElementById('fileBadge').style.display = 'none';
 }
 </script>
