@@ -8,12 +8,10 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-
-.page { width: 100%; max-width: 420px; padding: 20px; display: none; }
+.page { width: 100%; max-width: 460px; padding: 20px; display: none; }
 .page.active { display: flex; }
 .card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); width: 100%; }
 .card h1 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 28px; text-align: center; }
-
 label { display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px; }
 input[type="email"], input[type="password"] { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; margin-bottom: 16px; font-family: inherit; }
 input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1; }
@@ -22,19 +20,16 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
 .auth-btn:disabled { background: #a5b4fc; cursor: not-allowed; }
 .back-link { text-align: center; font-size: 13px; color: #aaa; margin-top: 14px; cursor: pointer; }
 .back-link:hover { color: #6366f1; }
-
 .msg-box { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
 .msg-box.error { background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; }
 .msg-box.success { background: #f0fdf4; border: 1px solid #86efac; color: #16a34a; }
-
 .otp-hint { text-align: center; font-size: 14px; color: #555; margin-bottom: 24px; line-height: 1.7; }
-.otp-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
-.otp-row input { width: 42px; height: 52px; text-align: center; font-size: 20px; font-weight: 700; border: 1.5px solid #ddd; border-radius: 10px; outline: none; transition: border 0.2s; padding: 0; font-family: inherit; }
+.otp-row { display: flex; gap: 7px; justify-content: center; margin-bottom: 24px; }
+.otp-row input { width: 40px; height: 50px; text-align: center; font-size: 20px; font-weight: 700; border: 1.5px solid #ddd; border-radius: 10px; outline: none; transition: border 0.2s; padding: 0; font-family: inherit; }
 .otp-row input:focus { border-color: #6366f1; }
 .resend-link { text-align: center; font-size: 13px; color: #888; margin-top: 14px; }
 .resend-link a { color: #6366f1; cursor: pointer; font-weight: 500; }
 .resend-link a:hover { text-decoration: underline; }
-
 .chat-wrapper { display: none; width: 100%; max-width: 720px; height: 100vh; flex-direction: column; background: #fff; }
 .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #eee; }
 .chat-header-left { display: flex; align-items: center; gap: 10px; }
@@ -81,7 +76,7 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
     <input type="email" id="loginEmail" placeholder="you@example.com"/>
     <label>Password</label>
     <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()"/>
-    <button class="auth-btn" id="loginBtn" onclick="doLogin()">Send OTP</button>
+    <button class="auth-btn" id="loginBtn" onclick="doLogin()">Login</button>
     <div class="back-link" style="margin-top:20px;">
       Don't have an account?
       <span onclick="showPage('signupFormPage')" style="color:#6366f1;font-weight:600;cursor:pointer;">Sign Up</span>
@@ -95,7 +90,7 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
     <h1>Login</h1>
     <div class="msg-box error" id="loginOtpError"></div>
     <div class="msg-box success" id="loginOtpSuccess"></div>
-    <p class="otp-hint">✅ OTP sent!<br>Check your inbox at <b id="loginOtpEmail"></b></p>
+    <p class="otp-hint">✅ OTP sent! Check your email:<br><b id="loginOtpEmail"></b></p>
     <div class="otp-row" id="loginOtpRow">
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
@@ -121,7 +116,7 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
     <input type="email" id="signupEmail" placeholder="you@example.com"/>
     <label>Password</label>
     <input type="password" id="signupPassword" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter') doSignup()"/>
-    <button class="auth-btn" id="signupBtn" onclick="doSignup()">Send OTP</button>
+    <button class="auth-btn" id="signupBtn" onclick="doSignup()">Signup</button>
     <div class="back-link" style="margin-top:20px;">
       Already have an account?
       <span onclick="showPage('loginFormPage')" style="color:#6366f1;font-weight:600;cursor:pointer;">Login</span>
@@ -135,7 +130,7 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
     <h1>Signup</h1>
     <div class="msg-box error" id="signupOtpError"></div>
     <div class="msg-box success" id="signupOtpSuccess"></div>
-    <p class="otp-hint">✅ OTP sent!<br>Check your inbox at <b id="signupOtpEmail"></b></p>
+    <p class="otp-hint">✅ OTP sent! Check your email:<br><b id="signupOtpEmail"></b></p>
     <div class="otp-row" id="signupOtpRow">
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
@@ -198,7 +193,6 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
 function clearMsgs() {
   document.querySelectorAll('.msg-box').forEach(el => { el.style.display='none'; el.textContent=''; });
 }
@@ -226,17 +220,14 @@ function clearOtp(rowId) {
   document.getElementById(rowId).querySelector('input').focus();
 }
 
-// SIGNUP
 async function doSignup(resend=false) {
   clearMsgs();
   const email    = resend ? pendingEmail    : document.getElementById('signupEmail').value.trim();
   const password = resend ? pendingPassword : document.getElementById('signupPassword').value;
   if (!resend && !email)            { showErr('signupError','Please enter your email.'); return; }
   if (!resend && password.length<6) { showErr('signupError','Password must be at least 6 characters.'); return; }
-
   const btn = document.getElementById('signupBtn');
   if (btn) { btn.disabled=true; btn.textContent='Sending...'; }
-
   try {
     const res = await fetch(`${BACKEND}/signup`, {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -249,7 +240,7 @@ async function doSignup(resend=false) {
     showPage('signupOtpPage');
     if (resend) showOk('signupOtpSuccess','A new OTP has been sent!');
   } catch(e) { showErr('signupError','Could not connect to server.'); }
-  if (btn) { btn.disabled=false; btn.textContent='Send OTP'; }
+  if (btn) { btn.disabled=false; btn.textContent='Login'; }
 }
 
 async function verifySignupOtp() {
@@ -270,16 +261,13 @@ async function verifySignupOtp() {
   btn.disabled=false; btn.textContent='Verify & Create Account';
 }
 
-// LOGIN
 async function doLogin(resend=false) {
   clearMsgs();
   const email    = resend ? pendingEmail    : document.getElementById('loginEmail').value.trim();
   const password = resend ? pendingPassword : document.getElementById('loginPassword').value;
   if (!resend && (!email||!password)) { showErr('loginError','Please enter your email and password.'); return; }
-
   const btn = document.getElementById('loginBtn');
   if (btn) { btn.disabled=true; btn.textContent='Sending...'; }
-
   try {
     const res = await fetch(`${BACKEND}/login/send-otp`, {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -292,7 +280,7 @@ async function doLogin(resend=false) {
     showPage('loginOtpPage');
     if (resend) showOk('loginOtpSuccess','A new OTP has been sent!');
   } catch(e) { showErr('loginError','Could not connect to server.'); }
-  if (btn) { btn.disabled=false; btn.textContent='Send OTP'; }
+  if (btn) { btn.disabled=false; btn.textContent='Signup'; }
 }
 
 async function verifyLoginOtp() {
@@ -313,7 +301,6 @@ async function verifyLoginOtp() {
   btn.disabled=false; btn.textContent='Verify & Login';
 }
 
-// CHAT
 function enterChat(user) {
   currentUser=user;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -374,7 +361,7 @@ async function uploadFile(input) {
       document.getElementById('fileBadge').style.display='flex';
       document.getElementById('welcomeScreen').style.display='none';
       document.getElementById('messages').style.display='flex';
-      addMsg(`📎 File "<b>${input.files[0].name}</b>" uploaded! You can now ask questions about this file.`,'ai');
+      addMsg(`📎 File "<b>${input.files[0].name}</b>" uploaded! You can now ask questions about it.`,'ai');
     } else { alert(data.detail||'Upload failed.'); }
   } catch(e){ alert('File upload failed.'); }
   input.value='';
