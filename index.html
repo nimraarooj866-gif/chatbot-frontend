@@ -185,6 +185,7 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
 
 <script>
 const BACKEND = "https://chatbot-backend-production-182b.up.railway.app";
+const SESSION_KEY = "chatbot_session";
 let currentUser = null;
 let pendingEmail = null;
 let pendingPassword = null;
@@ -218,6 +219,17 @@ function getOtp(rowId) {
 function clearOtp(rowId) {
   document.getElementById(rowId).querySelectorAll('input').forEach(i=>i.value='');
   document.getElementById(rowId).querySelector('input').focus();
+}
+
+// ── SESSION (localStorage) ───────────────────────────────
+function saveSession(user) {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify(user)); } catch(e) {}
+}
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch(e) { return null; }
+}
+function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
 }
 
 async function doSignup(resend=false) {
@@ -303,13 +315,30 @@ async function verifyLoginOtp() {
 
 function enterChat(user) {
   currentUser=user;
+  saveSession(user);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('chatPage').style.display='flex';
   document.getElementById('userEmailDisplay').textContent=user.email;
+  loadHistory(user.user_id);
+}
+
+// ── LOAD PAST CHAT HISTORY FROM SUPABASE ─────────────────
+async function loadHistory(userId) {
+  try {
+    const res = await fetch(`${BACKEND}/history/${encodeURIComponent(userId)}`);
+    const data = await res.json();
+    const hist = data.history || [];
+    if (hist.length > 0) {
+      document.getElementById('welcomeScreen').style.display='none';
+      document.getElementById('messages').style.display='flex';
+      hist.forEach(m => addMsg(m.content, m.role === 'assistant' ? 'ai' : 'user'));
+    }
+  } catch(e) { console.error('Could not load chat history', e); }
 }
 
 function logout() {
   currentUser=null; pendingEmail=null; pendingPassword=null;
+  clearSession();
   document.getElementById('chatPage').style.display='none';
   document.getElementById('messages').innerHTML=`<div class="typing msg ai" id="typing"><div class="msg-bubble">Thinking...</div></div>`;
   document.getElementById('welcomeScreen').style.display='flex';
@@ -372,6 +401,14 @@ async function clearFile() {
   await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`,{method:'DELETE'});
   document.getElementById('fileBadge').style.display='none';
 }
+
+// ── RESTORE SESSION ON PAGE LOAD ─────────────────────────
+(function restoreSession() {
+  const saved = getSession();
+  if (saved && saved.user_id) {
+    enterChat(saved);
+  }
+})();
 </script>
 </body>
 </html>
