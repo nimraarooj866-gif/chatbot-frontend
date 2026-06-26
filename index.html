@@ -14,17 +14,6 @@ body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh;
 .card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); width: 100%; }
 .card h1 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 28px; text-align: center; }
 
-/* LANDING */
-.landing-subtitle { text-align: center; color: #888; font-size: 15px; margin-bottom: 36px; }
-.landing-robot { font-size: 60px; text-align: center; margin-bottom: 12px; }
-.landing-title { font-size: 28px; font-weight: 700; color: #111; text-align: center; margin-bottom: 8px; }
-.btn-row { display: flex; gap: 12px; }
-.btn-outline { flex: 1; padding: 13px; background: #fff; color: #6366f1; border: 2px solid #6366f1; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-.btn-outline:hover { background: #f5f3ff; }
-.btn-solid { flex: 1; padding: 13px; background: #6366f1; color: #fff; border: 2px solid #6366f1; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-.btn-solid:hover { background: #4f46e5; }
-
-/* FORMS */
 label { display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px; }
 input[type="email"], input[type="password"] { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; margin-bottom: 16px; font-family: inherit; }
 input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1; }
@@ -34,21 +23,18 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
 .back-link { text-align: center; font-size: 13px; color: #aaa; margin-top: 14px; cursor: pointer; }
 .back-link:hover { color: #6366f1; }
 
-/* MESSAGES */
 .msg-box { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
 .msg-box.error { background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; }
 .msg-box.success { background: #f0fdf4; border: 1px solid #86efac; color: #16a34a; }
 
-/* OTP */
 .otp-hint { text-align: center; font-size: 14px; color: #555; margin-bottom: 24px; line-height: 1.7; }
-.otp-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; }
-.otp-row input { width: 48px; height: 54px; text-align: center; font-size: 22px; font-weight: 700; border: 1.5px solid #ddd; border-radius: 10px; outline: none; transition: border 0.2s; padding: 0; font-family: inherit; }
+.otp-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+.otp-row input { width: 42px; height: 52px; text-align: center; font-size: 20px; font-weight: 700; border: 1.5px solid #ddd; border-radius: 10px; outline: none; transition: border 0.2s; padding: 0; font-family: inherit; }
 .otp-row input:focus { border-color: #6366f1; }
 .resend-link { text-align: center; font-size: 13px; color: #888; margin-top: 14px; }
 .resend-link a { color: #6366f1; cursor: pointer; font-weight: 500; }
 .resend-link a:hover { text-decoration: underline; }
 
-/* CHAT */
 .chat-wrapper { display: none; width: 100%; max-width: 720px; height: 100vh; flex-direction: column; background: #fff; }
 .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #eee; }
 .chat-header-left { display: flex; align-items: center; gap: 10px; }
@@ -97,9 +83,9 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
     <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()"/>
     <button class="auth-btn" id="loginBtn" onclick="doLogin()">Send OTP</button>
     <div class="back-link" style="margin-top:20px;">
-Don't have an account?
-<span onclick="showPage('signupFormPage')" style="color:#6366f1;font-weight:600;cursor:pointer;">Sign Up</span>
-</div>
+      Don't have an account?
+      <span onclick="showPage('signupFormPage')" style="color:#6366f1;font-weight:600;cursor:pointer;">Sign Up</span>
+    </div>
   </div>
 </div>
 
@@ -109,8 +95,10 @@ Don't have an account?
     <h1>Login</h1>
     <div class="msg-box error" id="loginOtpError"></div>
     <div class="msg-box success" id="loginOtpSuccess"></div>
-    <p class="otp-hint">✅ OTP bheja gaya!<br><b id="loginOtpEmail"></b> pe check karo</p>
+    <p class="otp-hint">✅ OTP sent!<br>Check your inbox at <b id="loginOtpEmail"></b></p>
     <div class="otp-row" id="loginOtpRow">
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
@@ -119,7 +107,7 @@ Don't have an account?
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow',true)" onkeydown="otpBack(event,this,'loginOtpRow')"/>
     </div>
     <button class="auth-btn" id="loginVerifyBtn" onclick="verifyLoginOtp()">Verify & Login</button>
-    <div class="resend-link">OTP nahi aaya? <a onclick="doLogin(true)">Resend karo</a></div>
+    <div class="resend-link">Didn't receive OTP? <a onclick="doLogin(true)">Resend</a></div>
     <div class="back-link" onclick="showPage('loginFormPage')">← Back</div>
   </div>
 </div>
@@ -135,9 +123,9 @@ Don't have an account?
     <input type="password" id="signupPassword" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter') doSignup()"/>
     <button class="auth-btn" id="signupBtn" onclick="doSignup()">Send OTP</button>
     <div class="back-link" style="margin-top:20px;">
-Already have an account?
-<span onclick="showPage('loginFormPage')" style="color:#6366f1;font-weight:600;cursor:pointer;">Login</span>
-</div>
+      Already have an account?
+      <span onclick="showPage('loginFormPage')" style="color:#6366f1;font-weight:600;cursor:pointer;">Login</span>
+    </div>
   </div>
 </div>
 
@@ -147,8 +135,10 @@ Already have an account?
     <h1>Signup</h1>
     <div class="msg-box error" id="signupOtpError"></div>
     <div class="msg-box success" id="signupOtpSuccess"></div>
-    <p class="otp-hint">✅ OTP bheja gaya!<br><b id="signupOtpEmail"></b> pe check karo</p>
+    <p class="otp-hint">✅ OTP sent!<br>Check your inbox at <b id="signupOtpEmail"></b></p>
     <div class="otp-row" id="signupOtpRow">
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
+      <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
@@ -157,7 +147,7 @@ Already have an account?
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow',true)" onkeydown="otpBack(event,this,'signupOtpRow')"/>
     </div>
     <button class="auth-btn" id="signupVerifyBtn" onclick="verifySignupOtp()">Verify & Create Account</button>
-    <div class="resend-link">OTP nahi aaya? <a onclick="doSignup(true)">Resend karo</a></div>
+    <div class="resend-link">Didn't receive OTP? <a onclick="doSignup(true)">Resend</a></div>
     <div class="back-link" onclick="showPage('signupFormPage')">← Back</div>
   </div>
 </div>
@@ -236,13 +226,13 @@ function clearOtp(rowId) {
   document.getElementById(rowId).querySelector('input').focus();
 }
 
-// ── SIGNUP ───────────────────────────────
+// SIGNUP
 async function doSignup(resend=false) {
   clearMsgs();
   const email    = resend ? pendingEmail    : document.getElementById('signupEmail').value.trim();
   const password = resend ? pendingPassword : document.getElementById('signupPassword').value;
-  if (!resend && !email)            { showErr('signupError','Email daalo.'); return; }
-  if (!resend && password.length<6) { showErr('signupError','Password kam az kam 6 characters ka hona chahiye.'); return; }
+  if (!resend && !email)            { showErr('signupError','Please enter your email.'); return; }
+  if (!resend && password.length<6) { showErr('signupError','Password must be at least 6 characters.'); return; }
 
   const btn = document.getElementById('signupBtn');
   if (btn) { btn.disabled=true; btn.textContent='Sending...'; }
@@ -253,19 +243,19 @@ async function doSignup(resend=false) {
       body: JSON.stringify({email, password})
     });
     const data = await res.json();
-    if (!res.ok) { showErr('signupError', data.detail||'Error hua.'); if(btn){btn.disabled=false;btn.textContent='Send OTP';} return; }
+    if (!res.ok) { showErr('signupError', data.detail||'An error occurred.'); if(btn){btn.disabled=false;btn.textContent='Signup';} return; }
     pendingEmail=email; pendingPassword=password;
     document.getElementById('signupOtpEmail').textContent=email;
     showPage('signupOtpPage');
-    if (resend) showOk('signupOtpSuccess','Naya OTP bheja gaya!');
-  } catch(e) { showErr('signupError','Server se connect nahi ho saka.'); }
+    if (resend) showOk('signupOtpSuccess','A new OTP has been sent!');
+  } catch(e) { showErr('signupError','Could not connect to server.'); }
   if (btn) { btn.disabled=false; btn.textContent='Send OTP'; }
 }
 
 async function verifySignupOtp() {
   clearMsgs();
   const otp = getOtp('signupOtpRow');
-  if (otp.length<6) { showErr('signupOtpError','Poora 6-digit OTP daalo.'); return; }
+  if (otp.length<8) { showErr('signupOtpError','Please enter the complete 8-digit OTP.'); return; }
   const btn = document.getElementById('signupVerifyBtn');
   btn.disabled=true; btn.textContent='Verifying...';
   try {
@@ -274,18 +264,18 @@ async function verifySignupOtp() {
       body: JSON.stringify({email:pendingEmail, token:otp, type:'signup'})
     });
     const data = await res.json();
-    if (!res.ok) { showErr('signupOtpError', data.detail||'OTP galat hai.'); clearOtp('signupOtpRow'); btn.disabled=false; btn.textContent='Verify & Create Account'; return; }
+    if (!res.ok) { showErr('signupOtpError', data.detail||'Invalid OTP.'); clearOtp('signupOtpRow'); btn.disabled=false; btn.textContent='Verify & Create Account'; return; }
     enterChat(data);
-  } catch(e) { showErr('signupOtpError','Server se connect nahi ho saka.'); }
+  } catch(e) { showErr('signupOtpError','Could not connect to server.'); }
   btn.disabled=false; btn.textContent='Verify & Create Account';
 }
 
-// ── LOGIN ─────────────────────────────────
+// LOGIN
 async function doLogin(resend=false) {
   clearMsgs();
   const email    = resend ? pendingEmail    : document.getElementById('loginEmail').value.trim();
   const password = resend ? pendingPassword : document.getElementById('loginPassword').value;
-  if (!resend && (!email||!password)) { showErr('loginError','Email aur password daalo.'); return; }
+  if (!resend && (!email||!password)) { showErr('loginError','Please enter your email and password.'); return; }
 
   const btn = document.getElementById('loginBtn');
   if (btn) { btn.disabled=true; btn.textContent='Sending...'; }
@@ -296,19 +286,19 @@ async function doLogin(resend=false) {
       body: JSON.stringify({email, password})
     });
     const data = await res.json();
-    if (!res.ok) { showErr('loginError', data.detail||'Error hua.'); if(btn){btn.disabled=false;btn.textContent='Send OTP';} return; }
+    if (!res.ok) { showErr('loginError', data.detail||'An error occurred.'); if(btn){btn.disabled=false;btn.textContent='Login';} return; }
     pendingEmail=email; pendingPassword=password;
     document.getElementById('loginOtpEmail').textContent=email;
     showPage('loginOtpPage');
-    if (resend) showOk('loginOtpSuccess','Naya OTP bheja gaya!');
-  } catch(e) { showErr('loginError','Server se connect nahi ho saka.'); }
+    if (resend) showOk('loginOtpSuccess','A new OTP has been sent!');
+  } catch(e) { showErr('loginError','Could not connect to server.'); }
   if (btn) { btn.disabled=false; btn.textContent='Send OTP'; }
 }
 
 async function verifyLoginOtp() {
   clearMsgs();
   const otp = getOtp('loginOtpRow');
-  if (otp.length<6) { showErr('loginOtpError','Poora 6-digit OTP daalo.'); return; }
+  if (otp.length<8) { showErr('loginOtpError','Please enter the complete 8-digit OTP.'); return; }
   const btn = document.getElementById('loginVerifyBtn');
   btn.disabled=true; btn.textContent='Verifying...';
   try {
@@ -317,13 +307,13 @@ async function verifyLoginOtp() {
       body: JSON.stringify({email:pendingEmail, token:otp})
     });
     const data = await res.json();
-    if (!res.ok) { showErr('loginOtpError', data.detail||'OTP galat hai.'); clearOtp('loginOtpRow'); btn.disabled=false; btn.textContent='Verify & Login'; return; }
+    if (!res.ok) { showErr('loginOtpError', data.detail||'Invalid OTP.'); clearOtp('loginOtpRow'); btn.disabled=false; btn.textContent='Verify & Login'; return; }
     enterChat(data);
-  } catch(e) { showErr('loginOtpError','Server se connect nahi ho saka.'); }
+  } catch(e) { showErr('loginOtpError','Could not connect to server.'); }
   btn.disabled=false; btn.textContent='Verify & Login';
 }
 
-// ── CHAT ──────────────────────────────────
+// CHAT
 function enterChat(user) {
   currentUser=user;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -368,7 +358,7 @@ async function sendMessage() {
     const data=await res.json();
     document.getElementById('typing').style.display='none';
     addMsg(data.reply||'Error.','ai');
-  } catch(e) { document.getElementById('typing').style.display='none'; addMsg('Server se connect nahi ho saka.','ai'); }
+  } catch(e) { document.getElementById('typing').style.display='none'; addMsg('Could not connect to server.','ai'); }
 }
 
 async function uploadFile(input) {
@@ -384,7 +374,7 @@ async function uploadFile(input) {
       document.getElementById('fileBadge').style.display='flex';
       document.getElementById('welcomeScreen').style.display='none';
       document.getElementById('messages').style.display='flex';
-      addMsg(`📎 File "<b>${input.files[0].name}</b>" upload ho gayi! Ab is file ke baare mein kuch bhi poocho.`,'ai');
+      addMsg(`📎 File "<b>${input.files[0].name}</b>" uploaded! You can now ask questions about this file.`,'ai');
     } else { alert(data.detail||'Upload failed.'); }
   } catch(e){ alert('File upload failed.'); }
   input.value='';
