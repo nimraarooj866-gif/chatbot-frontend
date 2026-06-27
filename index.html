@@ -723,11 +723,6 @@ async function loadChatList() {
     const data = await res.json();
     chatList = data.chats || [];
     renderChatList();
-
-    // Auto-open most recent chat if exists
-    if (chatList.length > 0) {
-      openChat(chatList[0].id, chatList[0].title);
-    }
   } catch(e) { console.error('Could not load chats', e); }
 }
 
@@ -887,7 +882,7 @@ function handleKey(e) {
 }
 
 // ── DOCS PANEL ───────────────────────────────────────
-let uploadedDocs = [];   // [{name, user_id}]
+let uploadedDocs = [];   // [{name, blob}]
 let docsActive = true;
 
 function toggleDocsPanel() {
@@ -913,17 +908,27 @@ function toggleDocs(enabled) {
     disabledMsg.style.display = 'block';
   }
   renderDocsList();
-  // notify backend
   syncDocsState();
 }
 
 async function syncDocsState() {
   const userId = currentUser?.user_id || 'default';
   if (!docsActive) {
-    // disable: clear file context on backend
     await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
-  } else if (uploadedDocs.length > 0) {
-    // re-enable: nothing to do, backend already has them
+  } else {
+    // re-upload all docs to restore context
+    await reuploadAll();
+  }
+}
+
+async function reuploadAll() {
+  const userId = currentUser?.user_id || 'default';
+  // clear first, then upload all
+  await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
+  for (const doc of uploadedDocs) {
+    const formData = new FormData();
+    formData.append('file', doc.blob, doc.name);
+    await fetch(`${BACKEND}/upload?user_id=${encodeURIComponent(userId)}`, {method:'POST', body:formData});
   }
 }
 
@@ -946,15 +951,14 @@ function renderDocsList() {
 
 async function removeDoc(idx) {
   const userId = currentUser?.user_id || 'default';
-  uploadedDocs.splice(idx, 1);
+  const removed = uploadedDocs.splice(idx, 1)[0];
   renderDocsList();
-  // If no docs left, clear backend
   if (uploadedDocs.length === 0) {
     await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
+  } else {
+    // Re-upload remaining files so backend context is accurate
+    await reuploadAll();
   }
-  // If docs remain, re-upload all (simple approach)
-  // Backend only supports one file context at a time, so last uploaded wins
-  // For simplicity we just notify user
 }
 
 async function uploadFiles(input) {
@@ -962,9 +966,9 @@ async function uploadFiles(input) {
   const userId = currentUser?.user_id || 'default';
   const files = [...input.files];
 
-  // Show uploading state
   const el = document.getElementById('docsList');
-  el.innerHTML += `<div class="doc-uploading">Uploading ${files.length} file(s)...</div>`;
+  const loadingId = 'upload-loading-' + Date.now();
+  el.innerHTML += `<div class="doc-uploading" id="${loadingId}">Uploading ${files.length} file(s)...</div>`;
 
   for (const file of files) {
     const formData = new FormData();
@@ -973,7 +977,7 @@ async function uploadFiles(input) {
       const res = await fetch(`${BACKEND}/upload?user_id=${encodeURIComponent(userId)}`, {method:'POST', body:formData});
       const data = await res.json();
       if (res.ok) {
-        uploadedDocs.push({ name: file.name });
+        uploadedDocs.push({ name: file.name, blob: file });
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('messages').style.display = 'flex';
         addMsg(`📎 "<b>${file.name}</b>" uploaded! Ask me anything about it.`, 'ai');
@@ -984,11 +988,11 @@ async function uploadFiles(input) {
       addMsg(`❌ Could not upload "${file.name}".`, 'ai');
     }
   }
+  document.getElementById(loadingId)?.remove();
   renderDocsList();
   input.value = '';
 }
 
-// Legacy clearFile (kept for compatibility)
 async function clearFile() {
   const userId = currentUser?.user_id || 'default';
   await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
