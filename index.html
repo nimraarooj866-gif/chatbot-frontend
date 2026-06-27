@@ -93,7 +93,6 @@ body.chat-open .chat-app { display: flex; }
   cursor: pointer;
   transition: background 0.15s;
   gap: 6px;
-  group: true;
 }
 .chat-item:hover { background: #1f2937; }
 .chat-item.active { background: #1f2937; }
@@ -231,17 +230,59 @@ body.chat-open .chat-app { display: flex; }
 .msg { display: flex; flex-direction: column; max-width: 75%; }
 .msg.user { align-self: flex-end; align-items: flex-end; }
 .msg.ai { align-self: flex-start; align-items: flex-start; }
-.msg-bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
-.msg.user .msg-bubble { background: #6366f1; color: #fff; border-bottom-right-radius: 4px; }
+.msg-bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.6; }
+.msg.user .msg-bubble { background: #6366f1; color: #fff; border-bottom-right-radius: 4px; white-space: pre-wrap; }
 .msg.ai .msg-bubble { background: #f4f4f5; color: #111; border-bottom-left-radius: 4px; }
 .msg-time { font-size: 11px; color: #bbb; margin-top: 4px; }
 .typing { display: none; align-self: flex-start; }
 .typing .msg-bubble { background: #f4f4f5; color: #999; font-style: italic; }
 
+/* ── MARKDOWN STYLES ── */
+.msg.ai .msg-bubble pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 10px 14px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 8px 0;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  white-space: pre;
+}
+.msg.ai .msg-bubble code {
+  background: #e8e8e8;
+  color: #c7254e;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+}
+.msg.ai .msg-bubble pre code {
+  background: none;
+  color: #d4d4d4;
+  padding: 0;
+}
+.msg.ai .msg-bubble h1 { font-size: 17px; font-weight: 700; margin: 10px 0 4px; color: #111; }
+.msg.ai .msg-bubble h2 { font-size: 15px; font-weight: 700; margin: 10px 0 4px; color: #111; }
+.msg.ai .msg-bubble h3 { font-size: 14px; font-weight: 700; margin: 8px 0 4px; color: #111; }
+.msg.ai .msg-bubble ul, .msg.ai .msg-bubble ol { padding-left: 20px; margin: 6px 0; }
+.msg.ai .msg-bubble li { margin: 3px 0; line-height: 1.6; }
+.msg.ai .msg-bubble strong { font-weight: 700; }
+.msg.ai .msg-bubble em { font-style: italic; }
+.msg.ai .msg-bubble p { margin: 4px 0; }
+.msg.ai .msg-bubble hr { border: none; border-top: 1px solid #ddd; margin: 8px 0; }
+.msg.ai .msg-bubble a { color: #6366f1; text-decoration: underline; }
+.msg.ai .msg-bubble blockquote {
+  border-left: 3px solid #6366f1;
+  padding-left: 10px;
+  color: #666;
+  margin: 6px 0;
+}
+
 /* ── INPUT AREA ── */
 .input-area { padding: 16px 20px; border-top: 1px solid #eee; }
 .input-row { display: flex; gap: 10px; align-items: center; }
-.file-btn { background: none; border: 1.5px solid #eee; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-size: 18px; color: #666; transition: all 0.2s; }
+.file-btn { background: none; border: 1.5px solid #eee; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-size: 18px; color: #666; transition: all 0.2s; position: relative; }
 .file-btn:hover { border-color: #6366f1; color: #6366f1; }
 #messageInput { flex: 1; padding: 12px 16px; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; outline: none; resize: none; font-family: inherit; transition: border 0.2s; }
 #messageInput:focus { border-color: #6366f1; }
@@ -307,7 +348,7 @@ body.chat-open .chat-app { display: flex; }
 }
 .doc-badge.disabled { background: #f3f4f6; border-color: #d1d5db; color: #9ca3af; }
 .doc-badge span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
-.doc-badge button { background: none; border: none; cursor: pointer; color: #7c3aed; font-size: 13px; flex-shrink:0; }
+.doc-badge button { background: none; border: none; cursor: pointer; color: #7c3aed; font-size: 13px; flex-shrink: 0; }
 .doc-badge.disabled button { color: #9ca3af; }
 .doc-uploading { font-size: 12px; color: #6366f1; font-style: italic; }
 .docs-add-btn {
@@ -323,8 +364,7 @@ body.chat-open .chat-app { display: flex; }
   align-self: flex-start;
 }
 .docs-add-btn:hover { background: #ede9fe; }
-/* file-btn indicator when docs loaded */
-.file-btn.has-docs { border-color: #6366f1; color: #6366f1; position: relative; }
+.file-btn.has-docs { border-color: #6366f1; color: #6366f1; }
 .file-btn.has-docs::after {
   content: '';
   position: absolute;
@@ -335,7 +375,7 @@ body.chat-open .chat-app { display: flex; }
   border: 1.5px solid #fff;
 }
 /* Toggle switch */
-.toggle-label { display:flex; align-items:center; gap:6px; cursor:pointer; }
+.toggle-label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
 .toggle-track {
   width: 32px; height: 18px;
   background: #6366f1;
@@ -357,7 +397,7 @@ body.chat-open .chat-app { display: flex; }
 .toggle-text { font-size: 12px; color: #6b7280; }
 input[type="checkbox"].sr-only { display: none; }
 
-/* ── MOBILE SIDEBAR TOGGLE ── */
+/* ── MOBILE ── */
 @media (max-width: 640px) {
   .sidebar { position: fixed; left: -260px; top: 0; z-index: 100; transition: left 0.25s; }
   .sidebar.open { left: 0; }
@@ -539,7 +579,7 @@ let currentUser = null;
 let pendingEmail = null;
 let pendingPassword = null;
 let currentChatId = null;
-let chatList = [];  // [{id, title, ...}]
+let chatList = [];
 
 // ── AUTH HELPERS ──────────────────────────────────────
 function showPage(id) {
@@ -682,21 +722,17 @@ async function verifyLoginOtp() {
 function enterChat(user) {
   currentUser = user;
   saveSession(user);
-
-  // Hide auth pages, show chat
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.body.classList.add('chat-open');
-
-  // Set user info in sidebar
   document.getElementById('userEmailSidebar').textContent = user.email;
   document.getElementById('userAvatar').textContent = user.email[0].toUpperCase();
-
   loadChatList();
 }
 
 // ── LOGOUT ────────────────────────────────────────────
 function logout() {
-  currentUser = null; pendingEmail = null; pendingPassword = null; currentChatId = null; chatList = [];
+  currentUser = null; pendingEmail = null; pendingPassword = null;
+  currentChatId = null; chatList = [];
   clearSession();
   document.body.classList.remove('chat-open');
   resetChatUI();
@@ -707,7 +743,6 @@ function resetChatUI() {
   document.getElementById('messages').innerHTML = `<div class="typing msg ai" id="typing"><div class="msg-bubble">Thinking...</div></div>`;
   document.getElementById('welcomeScreen').style.display = 'flex';
   document.getElementById('messages').style.display = 'none';
-  document.getElementById('fileBadge') && (document.getElementById('fileBadge').style.display = 'none');
   document.getElementById('chatTopbarTitle').textContent = 'AI Chatbot';
   document.getElementById('chatList').innerHTML = '<div class="sidebar-empty">No chats yet. Start a new one!</div>';
   uploadedDocs = [];
@@ -763,11 +798,7 @@ async function startNewChat() {
   currentChatId = null;
   resetChatArea();
   document.getElementById('chatTopbarTitle').textContent = 'New Chat';
-
-  // Deselect sidebar items
   renderChatList();
-
-  // Focus input
   document.getElementById('messageInput').focus();
 }
 
@@ -782,9 +813,8 @@ async function openChat(chatId, title) {
   closeSidebar();
   currentChatId = chatId;
   document.getElementById('chatTopbarTitle').textContent = title || 'Chat';
-  renderChatList();  // update active state
+  renderChatList();
   resetChatArea();
-
   try {
     const res = await fetch(`${BACKEND}/messages/${encodeURIComponent(chatId)}`);
     const data = await res.json();
@@ -839,13 +869,11 @@ async function sendMessage() {
     document.getElementById('typing').style.display = 'none';
     addMsg(data.reply || 'Error.', 'ai');
 
-    // If new chat was created, update our state & sidebar
     if (data.chat_id && data.chat_id !== currentChatId) {
       currentChatId = data.chat_id;
-      await loadChatList();  // refresh list + re-render
+      await loadChatList();
     } else if (data.chat_id) {
-      // update title in sidebar if this was first message (title auto-set by backend)
-      await refreshChatList();
+      await loadChatList();
     }
   } catch(e) {
     document.getElementById('typing').style.display = 'none';
@@ -853,13 +881,56 @@ async function sendMessage() {
   }
 }
 
-async function refreshChatList() {
-  try {
-    const res = await fetch(`${BACKEND}/chats/${encodeURIComponent(currentUser.user_id)}`);
-    const data = await res.json();
-    chatList = data.chats || [];
-    renderChatList();
-  } catch(e) {}
+// ── MARKDOWN RENDERER ─────────────────────────────────
+function renderMarkdown(text) {
+  // Escape HTML first
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Code blocks (must come before inline code)
+  html = html.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) =>
+    `<pre><code>${code.trim()}</code></pre>`
+  );
+
+  // Inline code
+  html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+
+  // Blockquote
+  html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+
+  // Headings
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm,  '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm,   '<h1>$1</h1>');
+
+  // Bold + italic
+  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  // Bold
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Horizontal rule
+  html = html.replace(/^---$/gm, '<hr>');
+
+  // Bullet lists: group consecutive li items
+  html = html.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>[\s\S]*?<\/li>)(\n(?!<li>)|$)/g, (m, items) =>
+    `<ul>${items}</ul>`
+  );
+
+  // Numbered lists
+  html = html.replace(/^\d+\. (.+)$/gm, '<oli>$1</oli>');
+  html = html.replace(/(<oli>[\s\S]*?<\/oli>)(\n(?!<oli>)|$)/g, (m, items) =>
+    `<ol>${items.replace(/<\/?oli>/g, m => m.replace('oli','li'))}</ol>`
+  );
+
+  // Line breaks (not inside block elements)
+  html = html.replace(/\n(?!<\/?(ul|ol|li|h[123]|pre|blockquote|hr))/g, '<br>');
+
+  return html;
 }
 
 // ── ADD MESSAGE BUBBLE ────────────────────────────────
@@ -868,7 +939,8 @@ function addMsg(text, role) {
   const typing = document.getElementById('typing');
   const div = document.createElement('div');
   div.className = `msg ${role}`;
-  div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${timeNow()}</div>`;
+  const rendered = role === 'ai' ? renderMarkdown(text) : escHtml(text);
+  div.innerHTML = `<div class="msg-bubble">${rendered}</div><div class="msg-time">${timeNow()}</div>`;
   msgs.insertBefore(div, typing);
   msgs.scrollTop = msgs.scrollHeight;
 }
@@ -882,12 +954,11 @@ function handleKey(e) {
 }
 
 // ── DOCS PANEL ───────────────────────────────────────
-let uploadedDocs = [];   // [{name, blob}]
+let uploadedDocs = [];
 let docsActive = true;
 
 function toggleDocsPanel() {
-  const panel = document.getElementById('docsPanel');
-  panel.classList.toggle('open');
+  document.getElementById('docsPanel').classList.toggle('open');
 }
 function closeDocsPanel() {
   document.getElementById('docsPanel').classList.remove('open');
@@ -916,14 +987,12 @@ async function syncDocsState() {
   if (!docsActive) {
     await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
   } else {
-    // re-upload all docs to restore context
     await reuploadAll();
   }
 }
 
 async function reuploadAll() {
   const userId = currentUser?.user_id || 'default';
-  // clear first, then upload all
   await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
   for (const doc of uploadedDocs) {
     const formData = new FormData();
@@ -942,7 +1011,7 @@ function renderDocsList() {
   }
   btn.classList.add('has-docs');
   el.innerHTML = uploadedDocs.map((d, i) => `
-    <div class="doc-badge ${!docsActive ? 'disabled' : ''}" id="doc-${i}">
+    <div class="doc-badge ${!docsActive ? 'disabled' : ''}">
       <span title="${escHtml(d.name)}">📄 ${escHtml(d.name)}</span>
       <button onclick="removeDoc(${i})" title="Remove">✕</button>
     </div>
@@ -950,13 +1019,12 @@ function renderDocsList() {
 }
 
 async function removeDoc(idx) {
-  const userId = currentUser?.user_id || 'default';
-  const removed = uploadedDocs.splice(idx, 1)[0];
+  uploadedDocs.splice(idx, 1);
   renderDocsList();
   if (uploadedDocs.length === 0) {
+    const userId = currentUser?.user_id || 'default';
     await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
   } else {
-    // Re-upload remaining files so backend context is accurate
     await reuploadAll();
   }
 }
@@ -980,12 +1048,12 @@ async function uploadFiles(input) {
         uploadedDocs.push({ name: file.name, blob: file });
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('messages').style.display = 'flex';
-        addMsg(`📎 "<b>${file.name}</b>" uploaded! Ask me anything about it.`, 'ai');
+        addMsg(`📎 <strong>${escHtml(file.name)}</strong> uploaded! Ask me anything about it.`, 'ai');
       } else {
-        addMsg(`❌ Failed to upload "${file.name}": ${data.detail || 'Unknown error'}`, 'ai');
+        addMsg(`❌ Failed to upload "${escHtml(file.name)}": ${data.detail || 'Unknown error'}`, 'ai');
       }
     } catch(e) {
-      addMsg(`❌ Could not upload "${file.name}".`, 'ai');
+      addMsg(`❌ Could not upload "${escHtml(file.name)}".`, 'ai');
     }
   }
   document.getElementById(loadingId)?.remove();
