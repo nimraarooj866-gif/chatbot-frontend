@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -281,48 +280,18 @@ body.chat-open .chat-app { display: flex; }
 <script>
 const BACKEND = "https://chatbot-backend-production-182b.up.railway.app";
 const SESSION_KEY = "chatbot_session";
-const DOCS_STORAGE_KEY = "chatbot_docs";
+// ─── DOCS PERSISTENCE (backend-based, cross-device) ────────────────────────
 
-let currentUser = null;
-let pendingEmail = null;
-let pendingPassword = null;
-let currentChatId = null;
-let chatList = [];
-let uploadedDocs = [];
-let docsActive = true;
-
-// ─── DOCS PERSISTENCE ───────────────────────────────────────────────────────
-
-function saveDocsToStorage() {
+async function loadDocsFromBackend() {
+  if (!currentUser) return;
   try {
-    const toSave = uploadedDocs.map(d => ({ name: d.name, b64: d.b64, type: d.type }));
-    localStorage.setItem(DOCS_STORAGE_KEY, JSON.stringify(toSave));
-  } catch(e) { console.warn('Could not save docs to storage', e); }
-}
-
-function clearDocsFromStorage() {
-  try { localStorage.removeItem(DOCS_STORAGE_KEY); } catch(e) {}
-}
-
-async function loadDocsFromStorage() {
-  try {
-    const raw = localStorage.getItem(DOCS_STORAGE_KEY);
-    if (!raw) return;
-    const saved = JSON.parse(raw);
-    if (!saved || saved.length === 0) return;
-    for (const d of saved) {
-      const binary = atob(d.b64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const blob = new Blob([bytes], { type: d.type || 'application/octet-stream' });
-      uploadedDocs.push({ name: d.name, blob, b64: d.b64, type: d.type });
-    }
+    const res = await fetch(`${BACKEND}/docs/${encodeURIComponent(currentUser.user_id)}`);
+    const data = await res.json();
+    const docs = data.docs || [];
+    uploadedDocs = docs.map(d => ({ name: d.filename, blob: null, b64: null, type: null }));
     renderDocsList();
     updateDocsToggleUI();
-    if (uploadedDocs.length > 0 && docsActive) {
-      await reuploadAll();
-    }
-  } catch(e) { console.warn('Could not restore docs from storage', e); }
+  } catch(e) { console.warn('Could not load docs from backend', e); }
 }
 
 // ─── AUTH HELPERS ────────────────────────────────────────────────────────────
@@ -495,7 +464,7 @@ async function enterChat(user) {
   document.getElementById('userEmailSidebar').textContent = user.email;
   document.getElementById('userAvatar').textContent = user.email[0].toUpperCase();
   loadChatList();
-  await loadDocsFromStorage(); // ← await so docs are restored before anything resets them
+  await loadDocsFromBackend(); // ← restore docs list from backend (cross-device)
 }
 
 // ─── LOGOUT ───────────────────────────────────────────────────────────────────
@@ -505,7 +474,6 @@ function logout() {
   currentChatId = null; chatList = [];
   uploadedDocs = []; docsActive = true;
   clearSession();
-  clearDocsFromStorage(); // ← CLEAR DOCS ON LOGOUT
   document.body.classList.remove('chat-open');
   resetChatUI(true);
   showPage('loginFormPage');
@@ -733,23 +701,13 @@ function updateDocsToggleUI() {
 }
 
 async function syncDocsState() {
-  const userId = currentUser?.user_id || 'default';
-  if (!docsActive) {
-    await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
-  } else {
-    await reuploadAll();
-  }
+  // docs_enabled flag is sent with each chat message
+  // no need to clear/re-upload from backend — backend always has the docs
+  // just update the UI badge
+  updateDocsToggleUI();
 }
 
-async function reuploadAll() {
-  const userId = currentUser?.user_id || 'default';
-  await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
-  for (const doc of uploadedDocs) {
-    const formData = new FormData();
-    formData.append('file', doc.blob, doc.name);
-    await fetch(`${BACKEND}/upload?user_id=${encodeURIComponent(userId)}`, {method:'POST', body:formData});
-  }
-}
+// reuploadAll removed — docs persist on backend per user account
 
 function renderDocsList() {
   const el = document.getElementById('docsFileList');
@@ -772,17 +730,13 @@ function renderDocsList() {
 }
 
 async function removeDoc(idx) {
+  const userId = currentUser?.user_id || 'default';
+  const filename = uploadedDocs[idx].name;
   uploadedDocs.splice(idx, 1);
-  saveDocsToStorage(); // ← SAVE AFTER REMOVE
   renderDocsList();
   updateDocsToggleUI();
-  if (uploadedDocs.length === 0) {
-    const userId = currentUser?.user_id || 'default';
-    await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
-    clearDocsFromStorage(); // ← CLEAR STORAGE IF NO DOCS LEFT
-  } else {
-    await reuploadAll();
-  }
+  // Delete from backend
+  await fetch(`${BACKEND}/docs/${encodeURIComponent(userId)}/${encodeURIComponent(filename)}`, {method:'DELETE'});
 }
 
 // ─── UPLOAD FILES ─────────────────────────────────────────────────────────────
@@ -800,14 +754,7 @@ async function uploadFiles(input) {
       const res = await fetch(`${BACKEND}/upload?user_id=${encodeURIComponent(userId)}`, {method:'POST', body:formData});
       const data = await res.json();
       if (res.ok) {
-        // ← SAVE BASE64 FOR PERSISTENCE
-        const b64 = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result.split(',')[1]);
-          reader.readAsDataURL(file);
-        });
-        uploadedDocs.push({ name: file.name, blob: file, b64, type: file.type });
-        saveDocsToStorage(); // ← SAVE TO LOCALSTORAGE
+        uploadedDocs.push({ name: file.name, blob: file, b64: null, type: file.type });
       } else {
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('messages').style.display = 'flex';
