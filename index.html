@@ -616,11 +616,24 @@ function renderChatList() {
     return;
   }
   el.innerHTML = chatList.map(c => `
-    <div class="chat-item ${c.id === currentChatId ? 'active' : ''}" onclick="openChat('${c.id}', ${JSON.stringify(c.title)})">
+    <div class="chat-item ${c.id === currentChatId ? 'active' : ''}" data-id="${c.id}" data-title="${escHtml(c.title)}">
       <span class="chat-item-title" title="${escHtml(c.title)}">${escHtml(c.title)}</span>
-      <button class="chat-delete-btn" onclick="deleteChat(event,'${c.id}')" title="Delete">🗑</button>
+      <button class="chat-delete-btn" data-delete="${c.id}" title="Delete">🗑</button>
     </div>
   `).join('');
+
+  el.querySelectorAll('.chat-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('.chat-delete-btn')) return;
+      openChat(item.dataset.id, item.dataset.title);
+    });
+  });
+  el.querySelectorAll('.chat-delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deleteChatById(btn.dataset.delete);
+    });
+  });
 }
 
 function escHtml(str) {
@@ -668,8 +681,7 @@ async function openChat(chatId, title) {
 }
 
 // ── DELETE CHAT ───────────────────────────────────────
-async function deleteChat(event, chatId) {
-  event.stopPropagation();
+async function deleteChatById(chatId) {
   if (!confirm('Delete this chat?')) return;
   try {
     await fetch(`${BACKEND}/chats/${encodeURIComponent(chatId)}`, { method: 'DELETE' });
