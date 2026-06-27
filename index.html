@@ -9,7 +9,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
 
-/* ── AUTH PAGES ── */
+/* AUTH PAGES */
 .page { width: 100%; max-width: 460px; padding: 20px; display: none; }
 .page.active { display: flex; }
 .card { background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); width: 100%; }
@@ -33,12 +33,12 @@ input[type="email"]:focus, input[type="password"]:focus { border-color: #6366f1;
 .resend-link a { color: #6366f1; cursor: pointer; font-weight: 500; }
 .resend-link a:hover { text-decoration: underline; }
 
-/* ── CHAT LAYOUT ── */
+/* CHAT LAYOUT */
 .chat-app { display: none; width: 100%; height: 100vh; }
 body.chat-open { align-items: stretch; justify-content: stretch; background: #fff; }
 body.chat-open .chat-app { display: flex; }
 
-/* ── SIDEBAR ── */
+/* SIDEBAR */
 .sidebar {
   width: 260px;
   min-width: 260px;
@@ -68,22 +68,175 @@ body.chat-open .chat-app { display: flex; }
   transition: background 0.2s;
 }
 .new-chat-btn:hover { background: #4f46e5; }
-.sidebar-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 14px 14px 6px;
+
+/* SIDEBAR TABS */
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid #1f2937;
 }
-.chat-list {
+.sidebar-tab {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color 0.15s, border-bottom 0.15s;
+  border-bottom: 2px solid transparent;
+  font-family: inherit;
+}
+.sidebar-tab.active {
+  color: #a5b4fc;
+  border-bottom: 2px solid #6366f1;
+}
+.sidebar-tab:hover { color: #d1d5db; }
+
+/* CHATS PANEL */
+.chats-panel {
   flex: 1;
   overflow-y: auto;
   padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
 }
-.chat-list::-webkit-scrollbar { width: 4px; }
-.chat-list::-webkit-scrollbar-track { background: transparent; }
-.chat-list::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+.chats-panel::-webkit-scrollbar { width: 4px; }
+.chats-panel::-webkit-scrollbar-track { background: transparent; }
+.chats-panel::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+
+/* DOCS PANEL (sidebar) */
+.docs-sidebar-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+.docs-sidebar-panel.active { display: flex; }
+.docs-sidebar-panel::-webkit-scrollbar { width: 4px; }
+.docs-sidebar-panel::-webkit-scrollbar-track { background: transparent; }
+.docs-sidebar-panel::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+
+.docs-upload-area {
+  border: 1.5px dashed #374151;
+  border-radius: 10px;
+  padding: 18px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.docs-upload-area:hover { border-color: #6366f1; background: #1f2937; }
+.docs-upload-area-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #d1d5db;
+  margin-bottom: 4px;
+}
+.docs-upload-area-sub {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.docs-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1f2937;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.docs-toggle-label {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+.toggle-track {
+  width: 32px; height: 18px;
+  background: #6366f1;
+  border-radius: 9px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.toggle-track.off { background: #374151; }
+.toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: left 0.2s;
+}
+.toggle-track.off .toggle-thumb { left: 16px; }
+
+.docs-status {
+  font-size: 11px;
+  color: #ef4444;
+  display: none;
+  padding: 0 2px;
+}
+
+.docs-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.docs-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1f2937;
+  border-radius: 8px;
+  padding: 8px 10px;
+  gap: 8px;
+}
+.docs-file-item.disabled { opacity: 0.4; }
+.docs-file-name {
+  font-size: 12px;
+  color: #d1d5db;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.docs-file-remove {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 2px;
+  border-radius: 4px;
+  transition: color 0.15s;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.docs-file-remove:hover { color: #ef4444; }
+.docs-empty-state {
+  font-size: 12px;
+  color: #4b5563;
+  text-align: center;
+  padding: 12px 0;
+}
+.docs-uploading {
+  font-size: 12px;
+  color: #6366f1;
+  font-style: italic;
+  text-align: center;
+  padding: 4px 0;
+}
+.docs-file-count {
+  font-size: 11px;
+  color: #6b7280;
+  padding: 0 2px;
+}
+
 .chat-item {
   display: flex;
   align-items: center;
@@ -110,15 +263,23 @@ body.chat-open .chat-app { display: flex; }
   border: none;
   color: #6b7280;
   cursor: pointer;
-  font-size: 14px;
-  padding: 2px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 5px;
   border-radius: 4px;
   opacity: 0;
   transition: opacity 0.15s, color 0.15s;
   flex-shrink: 0;
+  font-family: inherit;
 }
 .chat-item:hover .chat-delete-btn { opacity: 1; }
 .chat-delete-btn:hover { color: #ef4444; }
+.sidebar-empty {
+  text-align: center;
+  color: #4b5563;
+  font-size: 12px;
+  padding: 20px 14px;
+}
 .sidebar-footer {
   padding: 12px;
   border-top: 1px solid #1f2937;
@@ -156,15 +317,17 @@ body.chat-open .chat-app { display: flex; }
   border: none;
   color: #6b7280;
   cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
   border-radius: 4px;
   transition: color 0.15s;
   flex-shrink: 0;
+  font-family: inherit;
 }
 .logout-btn-sidebar:hover { color: #ef4444; }
 
-/* ── MAIN CHAT AREA ── */
+/* MAIN CHAT AREA */
 .chat-main {
   flex: 1;
   display: flex;
@@ -189,20 +352,19 @@ body.chat-open .chat-app { display: flex; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.file-badge {
-  background: #ecfdf5;
-  border: 1px solid #86efac;
-  color: #16a34a;
-  font-size: 12px;
-  padding: 4px 10px;
+.docs-active-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6366f1;
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
+  padding: 3px 10px;
   border-radius: 20px;
   display: none;
-  align-items: center;
-  gap: 6px;
 }
-.file-badge button { background: none; border: none; cursor: pointer; color: #16a34a; font-size: 14px; }
+.docs-active-badge.visible { display: block; }
 
-/* ── WELCOME ── */
+/* WELCOME */
 .welcome-screen {
   flex: 1;
   display: flex;
@@ -212,11 +374,10 @@ body.chat-open .chat-app { display: flex; }
   text-align: center;
   padding: 40px;
 }
-.welcome-screen .robot { font-size: 56px; margin-bottom: 16px; }
 .welcome-screen h3 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 8px; }
 .welcome-screen p { font-size: 15px; color: #888; }
 
-/* ── MESSAGES ── */
+/* MESSAGES */
 .messages {
   flex: 1;
   overflow-y: auto;
@@ -237,31 +398,10 @@ body.chat-open .chat-app { display: flex; }
 .typing { display: none; align-self: flex-start; }
 .typing .msg-bubble { background: #f4f4f5; color: #999; font-style: italic; }
 
-/* ── MARKDOWN STYLES ── */
-.msg.ai .msg-bubble pre {
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: 10px 14px;
-  border-radius: 8px;
-  overflow-x: auto;
-  margin: 8px 0;
-  font-size: 13px;
-  font-family: 'Courier New', monospace;
-  white-space: pre;
-}
-.msg.ai .msg-bubble code {
-  background: #e8e8e8;
-  color: #c7254e;
-  padding: 2px 5px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-family: 'Courier New', monospace;
-}
-.msg.ai .msg-bubble pre code {
-  background: none;
-  color: #d4d4d4;
-  padding: 0;
-}
+/* MARKDOWN STYLES */
+.msg.ai .msg-bubble pre { background: #1e1e1e; color: #d4d4d4; padding: 10px 14px; border-radius: 8px; overflow-x: auto; margin: 8px 0; font-size: 13px; font-family: 'Courier New', monospace; white-space: pre; }
+.msg.ai .msg-bubble code { background: #e8e8e8; color: #c7254e; padding: 2px 5px; border-radius: 4px; font-size: 13px; font-family: 'Courier New', monospace; }
+.msg.ai .msg-bubble pre code { background: none; color: #d4d4d4; padding: 0; }
 .msg.ai .msg-bubble h1 { font-size: 17px; font-weight: 700; margin: 10px 0 4px; color: #111; }
 .msg.ai .msg-bubble h2 { font-size: 15px; font-weight: 700; margin: 10px 0 4px; color: #111; }
 .msg.ai .msg-bubble h3 { font-size: 14px; font-weight: 700; margin: 8px 0 4px; color: #111; }
@@ -269,135 +409,19 @@ body.chat-open .chat-app { display: flex; }
 .msg.ai .msg-bubble li { margin: 3px 0; line-height: 1.6; }
 .msg.ai .msg-bubble strong { font-weight: 700; }
 .msg.ai .msg-bubble em { font-style: italic; }
-.msg.ai .msg-bubble p { margin: 4px 0; }
 .msg.ai .msg-bubble hr { border: none; border-top: 1px solid #ddd; margin: 8px 0; }
 .msg.ai .msg-bubble a { color: #6366f1; text-decoration: underline; }
-.msg.ai .msg-bubble blockquote {
-  border-left: 3px solid #6366f1;
-  padding-left: 10px;
-  color: #666;
-  margin: 6px 0;
-}
+.msg.ai .msg-bubble blockquote { border-left: 3px solid #6366f1; padding-left: 10px; color: #666; margin: 6px 0; }
 
-/* ── INPUT AREA ── */
+/* INPUT AREA */
 .input-area { padding: 16px 20px; border-top: 1px solid #eee; }
 .input-row { display: flex; gap: 10px; align-items: center; }
-.file-btn { background: none; border: 1.5px solid #eee; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-size: 18px; color: #666; transition: all 0.2s; position: relative; }
-.file-btn:hover { border-color: #6366f1; color: #6366f1; }
 #messageInput { flex: 1; padding: 12px 16px; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; outline: none; resize: none; font-family: inherit; transition: border 0.2s; }
 #messageInput:focus { border-color: #6366f1; }
-.send-btn { background: #6366f1; color: #fff; border: none; border-radius: 12px; padding: 12px 18px; cursor: pointer; font-size: 18px; transition: background 0.2s; }
+.send-btn { background: #6366f1; color: #fff; border: none; border-radius: 12px; padding: 12px 22px; cursor: pointer; font-size: 14px; font-weight: 600; transition: background 0.2s; font-family: inherit; }
 .send-btn:hover { background: #4f46e5; }
-#fileInput { display: none; }
 
-/* ── EMPTY SIDEBAR STATE ── */
-.sidebar-empty {
-  text-align: center;
-  color: #4b5563;
-  font-size: 12px;
-  padding: 20px 14px;
-}
-
-/* ── DOCS PANEL ── */
-.docs-panel {
-  display: none;
-  border-top: 1px solid #eee;
-  background: #fafafa;
-  padding: 12px 16px;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 220px;
-}
-.docs-panel.open { display: flex; }
-.docs-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 13px;
-  font-weight: 600;
-  color: #374151;
-}
-.docs-close-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #9ca3af;
-  font-size: 14px;
-  padding: 2px 4px;
-}
-.docs-close-btn:hover { color: #ef4444; }
-.docs-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  overflow-y: auto;
-  max-height: 100px;
-}
-.docs-empty { font-size: 12px; color: #9ca3af; }
-.doc-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: #ede9fe;
-  border: 1px solid #c4b5fd;
-  color: #5b21b6;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 20px;
-  max-width: 180px;
-}
-.doc-badge.disabled { background: #f3f4f6; border-color: #d1d5db; color: #9ca3af; }
-.doc-badge span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
-.doc-badge button { background: none; border: none; cursor: pointer; color: #7c3aed; font-size: 13px; flex-shrink: 0; }
-.doc-badge.disabled button { color: #9ca3af; }
-.doc-uploading { font-size: 12px; color: #6366f1; font-style: italic; }
-.docs-add-btn {
-  background: none;
-  border: 1.5px dashed #c4b5fd;
-  color: #6366f1;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  align-self: flex-start;
-}
-.docs-add-btn:hover { background: #ede9fe; }
-.file-btn.has-docs { border-color: #6366f1; color: #6366f1; }
-.file-btn.has-docs::after {
-  content: '';
-  position: absolute;
-  top: 4px; right: 4px;
-  width: 7px; height: 7px;
-  background: #6366f1;
-  border-radius: 50%;
-  border: 1.5px solid #fff;
-}
-/* Toggle switch */
-.toggle-label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
-.toggle-track {
-  width: 32px; height: 18px;
-  background: #6366f1;
-  border-radius: 9px;
-  position: relative;
-  transition: background 0.2s;
-  flex-shrink: 0;
-}
-.toggle-track.off { background: #d1d5db; }
-.toggle-thumb {
-  position: absolute;
-  top: 2px; left: 2px;
-  width: 14px; height: 14px;
-  background: #fff;
-  border-radius: 50%;
-  transition: left 0.2s;
-}
-.toggle-track.off .toggle-thumb { left: 16px; }
-.toggle-text { font-size: 12px; color: #6b7280; }
-input[type="checkbox"].sr-only { display: none; }
-
-/* ── MOBILE ── */
+/* MOBILE */
 @media (max-width: 640px) {
   .sidebar { position: fixed; left: -260px; top: 0; z-index: 100; transition: left 0.25s; }
   .sidebar.open { left: 0; }
@@ -418,7 +442,7 @@ input[type="checkbox"].sr-only { display: none; }
 </head>
 <body>
 
-<!-- ── AUTH PAGES ── -->
+<!-- AUTH PAGES -->
 <div class="page active" id="loginFormPage">
   <div class="card">
     <h1>Login</h1>
@@ -426,7 +450,7 @@ input[type="checkbox"].sr-only { display: none; }
     <label>Email</label>
     <input type="email" id="loginEmail" placeholder="you@example.com"/>
     <label>Password</label>
-    <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()"/>
+    <input type="password" id="loginPassword" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter') doLogin()"/>
     <button class="auth-btn" id="loginBtn" onclick="doLogin()">Login</button>
     <div class="back-link" style="margin-top:20px;">
       Don't have an account?
@@ -440,7 +464,7 @@ input[type="checkbox"].sr-only { display: none; }
     <h1>Login</h1>
     <div class="msg-box error" id="loginOtpError"></div>
     <div class="msg-box success" id="loginOtpSuccess"></div>
-    <p class="otp-hint">✅ OTP sent! Check your email:<br><b id="loginOtpEmail"></b></p>
+    <p class="otp-hint">OTP sent! Check your email:<br><b id="loginOtpEmail"></b></p>
     <div class="otp-row" id="loginOtpRow">
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'loginOtpRow')" onkeydown="otpBack(event,this,'loginOtpRow')"/>
@@ -453,19 +477,19 @@ input[type="checkbox"].sr-only { display: none; }
     </div>
     <button class="auth-btn" id="loginVerifyBtn" onclick="verifyLoginOtp()">Verify & Login</button>
     <div class="resend-link">Didn't receive OTP? <a onclick="doLogin(true)">Resend</a></div>
-    <div class="back-link" onclick="showPage('loginFormPage')">← Back</div>
+    <div class="back-link" onclick="showPage('loginFormPage')">Back</div>
   </div>
 </div>
 
 <div class="page" id="signupFormPage">
   <div class="card">
-    <h1>Signup</h1>
+    <h1>Sign Up</h1>
     <div class="msg-box error" id="signupError"></div>
     <label>Email</label>
     <input type="email" id="signupEmail" placeholder="you@example.com"/>
     <label>Password</label>
     <input type="password" id="signupPassword" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter') doSignup()"/>
-    <button class="auth-btn" id="signupBtn" onclick="doSignup()">Signup</button>
+    <button class="auth-btn" id="signupBtn" onclick="doSignup()">Sign Up</button>
     <div class="back-link" style="margin-top:20px;">
       Already have an account?
       <span onclick="showPage('loginFormPage')" style="color:#6366f1;font-weight:600;cursor:pointer;">Login</span>
@@ -475,10 +499,10 @@ input[type="checkbox"].sr-only { display: none; }
 
 <div class="page" id="signupOtpPage">
   <div class="card">
-    <h1>Signup</h1>
+    <h1>Sign Up</h1>
     <div class="msg-box error" id="signupOtpError"></div>
     <div class="msg-box success" id="signupOtpSuccess"></div>
-    <p class="otp-hint">✅ OTP sent! Check your email:<br><b id="signupOtpEmail"></b></p>
+    <p class="otp-hint">OTP sent! Check your email:<br><b id="signupOtpEmail"></b></p>
     <div class="otp-row" id="signupOtpRow">
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
       <input maxlength="1" oninput="otpInput(this,'signupOtpRow')" onkeydown="otpBack(event,this,'signupOtpRow')"/>
@@ -491,29 +515,59 @@ input[type="checkbox"].sr-only { display: none; }
     </div>
     <button class="auth-btn" id="signupVerifyBtn" onclick="verifySignupOtp()">Verify & Create Account</button>
     <div class="resend-link">Didn't receive OTP? <a onclick="doSignup(true)">Resend</a></div>
-    <div class="back-link" onclick="showPage('signupFormPage')">← Back</div>
+    <div class="back-link" onclick="showPage('signupFormPage')">Back</div>
   </div>
 </div>
 
-<!-- ── CHAT APP ── -->
+<!-- CHAT APP -->
 <div class="chat-app" id="chatApp">
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <button class="new-chat-btn" onclick="startNewChat()">
-        <span style="font-size:18px;">✏️</span> New Chat
-      </button>
+      <button class="new-chat-btn" onclick="startNewChat()">+ New Chat</button>
     </div>
-    <div class="sidebar-label">Recent</div>
-    <div class="chat-list" id="chatList">
-      <div class="sidebar-empty">No chats yet. Start a new one!</div>
+
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" id="tabChats" onclick="switchTab('chats')">Chats</button>
+      <button class="sidebar-tab" id="tabDocs" onclick="switchTab('docs')">Documents</button>
     </div>
+
+    <!-- CHATS TAB -->
+    <div class="chats-panel" id="chatsPanel">
+      <div id="chatList" style="padding: 4px 0;">
+        <div class="sidebar-empty">No chats yet. Start a new one!</div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTS TAB -->
+    <div class="docs-sidebar-panel" id="docsPanel">
+
+      <div class="docs-toggle-row">
+        <span class="docs-toggle-label">Use documents in chat</span>
+        <div class="toggle-track" id="docsToggleTrack" onclick="toggleDocs()">
+          <div class="toggle-thumb"></div>
+        </div>
+      </div>
+      <div class="docs-status" id="docsStatus">Documents disabled — AI will ignore files.</div>
+
+      <div class="docs-upload-area" onclick="document.getElementById('fileInput').click()">
+        <div class="docs-upload-area-title">Upload Documents</div>
+        <div class="docs-upload-area-sub">PDF, DOCX, TXT supported</div>
+      </div>
+      <input type="file" id="fileInput" accept=".pdf,.docx,.txt" multiple onchange="uploadFiles(this)" style="display:none"/>
+
+      <div class="docs-file-count" id="docsFileCount"></div>
+      <div class="docs-file-list" id="docsFileList">
+        <div class="docs-empty-state">No files uploaded yet.</div>
+      </div>
+    </div>
+
     <div class="sidebar-footer">
       <div class="user-info">
         <div class="user-avatar" id="userAvatar">?</div>
         <div class="user-email-sidebar" id="userEmailSidebar"></div>
-        <button class="logout-btn-sidebar" onclick="logout()" title="Logout">⏏</button>
+        <button class="logout-btn-sidebar" onclick="logout()">Logout</button>
       </div>
     </div>
   </div>
@@ -524,48 +578,24 @@ input[type="checkbox"].sr-only { display: none; }
   <!-- MAIN AREA -->
   <div class="chat-main">
     <div class="chat-topbar">
-      <button class="menu-btn" id="menuBtn" onclick="toggleSidebar()">☰</button>
+      <button class="menu-btn" id="menuBtn" onclick="toggleSidebar()">&#9776;</button>
       <div class="chat-topbar-title" id="chatTopbarTitle">AI Chatbot</div>
-      <div class="file-badge" id="fileBadge">
-        <span id="fileName"></span>
-        <button onclick="clearFile()">✕</button>
-      </div>
+      <div class="docs-active-badge" id="docsActiveBadge">Docs Active</div>
     </div>
 
     <div class="welcome-screen" id="welcomeScreen">
-      <div class="robot">🤖</div>
       <h3>How can I help you?</h3>
-      <p>Ask me anything about programming, robotics, or AI.</p>
+      <p>Ask me anything, or upload documents in the Documents tab.</p>
     </div>
 
     <div class="messages" id="messages">
       <div class="typing msg ai" id="typing"><div class="msg-bubble">Thinking...</div></div>
     </div>
 
-    <!-- DOCS PANEL -->
-    <div class="docs-panel" id="docsPanel">
-      <div class="docs-panel-header">
-        <span>📂 Documents</span>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <label class="toggle-label">
-            <input type="checkbox" id="docsEnabled" checked onchange="toggleDocs(this.checked)"/>
-            <span class="toggle-track"><span class="toggle-thumb"></span></span>
-            <span class="toggle-text" id="docsToggleText">Enabled</span>
-          </label>
-          <button class="docs-close-btn" onclick="closeDocsPanel()">✕</button>
-        </div>
-      </div>
-      <div id="docsDisabledMsg" style="display:none;font-size:12px;color:#f87171;padding:4px 0 0;">Documents are disabled — AI will ignore uploaded files.</div>
-      <div class="docs-list" id="docsList"><div class="docs-empty">No files uploaded yet.</div></div>
-      <button class="docs-add-btn" onclick="document.getElementById('fileInput').click()">+ Add Files</button>
-      <input type="file" id="fileInput" accept=".pdf,.docx,.txt" multiple onchange="uploadFiles(this)" style="display:none"/>
-    </div>
-
     <div class="input-area">
       <div class="input-row">
-        <button class="file-btn" id="docsPanelBtn" onclick="toggleDocsPanel()" title="Documents">📎</button>
         <textarea id="messageInput" rows="1" placeholder="Type a message..." onkeydown="handleKey(event)"></textarea>
-        <button class="send-btn" onclick="sendMessage()">➤</button>
+        <button class="send-btn" onclick="sendMessage()">Send</button>
       </div>
     </div>
   </div>
@@ -580,8 +610,10 @@ let pendingEmail = null;
 let pendingPassword = null;
 let currentChatId = null;
 let chatList = [];
+let uploadedDocs = [];
+let docsActive = true;
 
-// ── AUTH HELPERS ──────────────────────────────────────
+// AUTH HELPERS
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const el = document.getElementById(id);
@@ -614,7 +646,7 @@ function clearOtp(rowId) {
   document.getElementById(rowId).querySelector('input').focus();
 }
 
-// ── SESSION ───────────────────────────────────────────
+// SESSION
 function saveSession(user) {
   try { localStorage.setItem(SESSION_KEY, JSON.stringify(user)); } catch(e) {}
 }
@@ -625,7 +657,26 @@ function clearSession() {
   try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
 }
 
-// ── SIDEBAR MOBILE ────────────────────────────────────
+// SIDEBAR TABS
+function switchTab(tab) {
+  const chatsPanel = document.getElementById('chatsPanel');
+  const docsPanel = document.getElementById('docsPanel');
+  const tabChats = document.getElementById('tabChats');
+  const tabDocs = document.getElementById('tabDocs');
+  if (tab === 'chats') {
+    chatsPanel.style.display = 'flex';
+    docsPanel.classList.remove('active');
+    tabChats.classList.add('active');
+    tabDocs.classList.remove('active');
+  } else {
+    chatsPanel.style.display = 'none';
+    docsPanel.classList.add('active');
+    tabChats.classList.remove('active');
+    tabDocs.classList.add('active');
+  }
+}
+
+// MOBILE SIDEBAR
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('mobileOverlay').classList.toggle('visible');
@@ -635,7 +686,7 @@ function closeSidebar() {
   document.getElementById('mobileOverlay').classList.remove('visible');
 }
 
-// ── SIGNUP ────────────────────────────────────────────
+// SIGNUP
 async function doSignup(resend=false) {
   clearMsgs();
   const email    = resend ? pendingEmail    : document.getElementById('signupEmail').value.trim();
@@ -650,13 +701,13 @@ async function doSignup(resend=false) {
       body: JSON.stringify({email, password})
     });
     const data = await res.json();
-    if (!res.ok) { showErr('signupError', data.detail||'An error occurred.'); if(btn){btn.disabled=false;btn.textContent='Signup';} return; }
+    if (!res.ok) { showErr('signupError', data.detail||'An error occurred.'); if(btn){btn.disabled=false;btn.textContent='Sign Up';} return; }
     pendingEmail=email; pendingPassword=password;
     document.getElementById('signupOtpEmail').textContent=email;
     showPage('signupOtpPage');
     if (resend) showOk('signupOtpSuccess','A new OTP has been sent!');
   } catch(e) { showErr('signupError','Could not connect to server.'); }
-  if (btn) { btn.disabled=false; btn.textContent='Signup'; }
+  if (btn) { btn.disabled=false; btn.textContent='Sign Up'; }
 }
 
 async function verifySignupOtp() {
@@ -677,7 +728,7 @@ async function verifySignupOtp() {
   btn.disabled=false; btn.textContent='Verify & Create Account';
 }
 
-// ── LOGIN ─────────────────────────────────────────────
+// LOGIN
 async function doLogin(resend=false) {
   clearMsgs();
   const email    = resend ? pendingEmail    : document.getElementById('loginEmail').value.trim();
@@ -718,7 +769,7 @@ async function verifyLoginOtp() {
   btn.disabled=false; btn.textContent='Verify & Login';
 }
 
-// ── ENTER CHAT ────────────────────────────────────────
+// ENTER CHAT
 function enterChat(user) {
   currentUser = user;
   saveSession(user);
@@ -729,10 +780,11 @@ function enterChat(user) {
   loadChatList();
 }
 
-// ── LOGOUT ────────────────────────────────────────────
+// LOGOUT
 function logout() {
   currentUser = null; pendingEmail = null; pendingPassword = null;
   currentChatId = null; chatList = [];
+  uploadedDocs = []; docsActive = true;
   clearSession();
   document.body.classList.remove('chat-open');
   resetChatUI();
@@ -745,13 +797,11 @@ function resetChatUI() {
   document.getElementById('messages').style.display = 'none';
   document.getElementById('chatTopbarTitle').textContent = 'AI Chatbot';
   document.getElementById('chatList').innerHTML = '<div class="sidebar-empty">No chats yet. Start a new one!</div>';
-  uploadedDocs = [];
-  docsActive = true;
-  document.getElementById('docsPanel').classList.remove('open');
   renderDocsList();
+  updateDocsToggleUI();
 }
 
-// ── LOAD CHAT LIST ────────────────────────────────────
+// LOAD CHAT LIST
 async function loadChatList() {
   try {
     const res = await fetch(`${BACKEND}/chats/${encodeURIComponent(currentUser.user_id)}`);
@@ -770,7 +820,7 @@ function renderChatList() {
   el.innerHTML = chatList.map(c => `
     <div class="chat-item ${c.id === currentChatId ? 'active' : ''}" data-id="${c.id}" data-title="${escHtml(c.title)}">
       <span class="chat-item-title" title="${escHtml(c.title)}">${escHtml(c.title)}</span>
-      <button class="chat-delete-btn" data-delete="${c.id}" title="Delete">🗑</button>
+      <button class="chat-delete-btn" data-delete="${c.id}" title="Delete">X</button>
     </div>
   `).join('');
 
@@ -792,7 +842,7 @@ function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── START NEW CHAT ────────────────────────────────────
+// NEW CHAT
 async function startNewChat() {
   closeSidebar();
   currentChatId = null;
@@ -808,7 +858,7 @@ function resetChatArea() {
   document.getElementById('messages').style.display = 'none';
 }
 
-// ── OPEN EXISTING CHAT ────────────────────────────────
+// OPEN CHAT
 async function openChat(chatId, title) {
   closeSidebar();
   currentChatId = chatId;
@@ -827,7 +877,7 @@ async function openChat(chatId, title) {
   } catch(e) { console.error('Could not load messages', e); }
 }
 
-// ── DELETE CHAT ───────────────────────────────────────
+// DELETE CHAT
 async function deleteChatById(chatId) {
   if (!confirm('Delete this chat?')) return;
   try {
@@ -842,7 +892,7 @@ async function deleteChatById(chatId) {
   } catch(e) { alert('Could not delete chat.'); }
 }
 
-// ── SEND MESSAGE ──────────────────────────────────────
+// SEND MESSAGE
 async function sendMessage() {
   const input = document.getElementById('messageInput');
   const msg = input.value.trim();
@@ -881,59 +931,36 @@ async function sendMessage() {
   }
 }
 
-// ── MARKDOWN RENDERER ─────────────────────────────────
+// MARKDOWN RENDERER
 function renderMarkdown(text) {
-  // Escape HTML first
   let html = text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-  // Code blocks (must come before inline code)
   html = html.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) =>
     `<pre><code>${code.trim()}</code></pre>`
   );
-
-  // Inline code
   html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-
-  // Blockquote
   html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
-
-  // Headings
   html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
   html = html.replace(/^## (.+)$/gm,  '<h2>$1</h2>');
   html = html.replace(/^# (.+)$/gm,   '<h1>$1</h1>');
-
-  // Bold + italic
   html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-  // Bold
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // Italic
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-  // Horizontal rule
   html = html.replace(/^---$/gm, '<hr>');
-
-  // Bullet lists: group consecutive li items
   html = html.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>[\s\S]*?<\/li>)(\n(?!<li>)|$)/g, (m, items) =>
-    `<ul>${items}</ul>`
-  );
-
-  // Numbered lists
+  html = html.replace(/(<li>[\s\S]*?<\/li>)(\n(?!<li>)|$)/g, (m, items) => `<ul>${items}</ul>`);
   html = html.replace(/^\d+\. (.+)$/gm, '<oli>$1</oli>');
   html = html.replace(/(<oli>[\s\S]*?<\/oli>)(\n(?!<oli>)|$)/g, (m, items) =>
-    `<ol>${items.replace(/<\/?oli>/g, m => m.replace('oli','li'))}</ol>`
+    `<ol>${items.replace(/<\/?oli>/g, t => t.replace('oli','li'))}</ol>`
   );
-
-  // Line breaks (not inside block elements)
   html = html.replace(/\n(?!<\/?(ul|ol|li|h[123]|pre|blockquote|hr))/g, '<br>');
-
   return html;
 }
 
-// ── ADD MESSAGE BUBBLE ────────────────────────────────
+// ADD MESSAGE
 function addMsg(text, role) {
   const msgs = document.getElementById('messages');
   const typing = document.getElementById('typing');
@@ -963,33 +990,27 @@ function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
-// ── DOCS PANEL ───────────────────────────────────────
-let uploadedDocs = [];
-let docsActive = true;
-
-function toggleDocsPanel() {
-  document.getElementById('docsPanel').classList.toggle('open');
-}
-function closeDocsPanel() {
-  document.getElementById('docsPanel').classList.remove('open');
+// DOCS TOGGLE
+function toggleDocs() {
+  docsActive = !docsActive;
+  updateDocsToggleUI();
+  syncDocsState();
 }
 
-function toggleDocs(enabled) {
-  docsActive = enabled;
-  const track = document.querySelector('.toggle-track');
-  const text = document.getElementById('docsToggleText');
-  const disabledMsg = document.getElementById('docsDisabledMsg');
-  if (enabled) {
+function updateDocsToggleUI() {
+  const track = document.getElementById('docsToggleTrack');
+  const status = document.getElementById('docsStatus');
+  const badge = document.getElementById('docsActiveBadge');
+  if (docsActive) {
     track.classList.remove('off');
-    text.textContent = 'Enabled';
-    disabledMsg.style.display = 'none';
+    status.style.display = 'none';
+    if (uploadedDocs.length > 0) badge.classList.add('visible');
   } else {
     track.classList.add('off');
-    text.textContent = 'Disabled';
-    disabledMsg.style.display = 'block';
+    status.style.display = 'block';
+    badge.classList.remove('visible');
   }
   renderDocsList();
-  syncDocsState();
 }
 
 async function syncDocsState() {
@@ -1012,18 +1033,24 @@ async function reuploadAll() {
 }
 
 function renderDocsList() {
-  const el = document.getElementById('docsList');
-  const btn = document.getElementById('docsPanelBtn');
+  const el = document.getElementById('docsFileList');
+  const count = document.getElementById('docsFileCount');
+  const badge = document.getElementById('docsActiveBadge');
+
   if (uploadedDocs.length === 0) {
-    el.innerHTML = '<div class="docs-empty">No files uploaded yet.</div>';
-    btn.classList.remove('has-docs');
+    el.innerHTML = '<div class="docs-empty-state">No files uploaded yet.</div>';
+    count.textContent = '';
+    badge.classList.remove('visible');
     return;
   }
-  btn.classList.add('has-docs');
+
+  count.textContent = `${uploadedDocs.length} file${uploadedDocs.length > 1 ? 's' : ''} uploaded`;
+  if (docsActive) badge.classList.add('visible');
+
   el.innerHTML = uploadedDocs.map((d, i) => `
-    <div class="doc-badge ${!docsActive ? 'disabled' : ''}">
-      <span title="${escHtml(d.name)}">📄 ${escHtml(d.name)}</span>
-      <button onclick="removeDoc(${i})" title="Remove">✕</button>
+    <div class="docs-file-item ${!docsActive ? 'disabled' : ''}">
+      <span class="docs-file-name" title="${escHtml(d.name)}">${escHtml(d.name)}</span>
+      <button class="docs-file-remove" onclick="removeDoc(${i})">X</button>
     </div>
   `).join('');
 }
@@ -1031,6 +1058,7 @@ function renderDocsList() {
 async function removeDoc(idx) {
   uploadedDocs.splice(idx, 1);
   renderDocsList();
+  updateDocsToggleUI();
   if (uploadedDocs.length === 0) {
     const userId = currentUser?.user_id || 'default';
     await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
@@ -1044,9 +1072,8 @@ async function uploadFiles(input) {
   const userId = currentUser?.user_id || 'default';
   const files = [...input.files];
 
-  const el = document.getElementById('docsList');
-  const loadingId = 'upload-loading-' + Date.now();
-  el.innerHTML += `<div class="doc-uploading" id="${loadingId}">Uploading ${files.length} file(s)...</div>`;
+  const el = document.getElementById('docsFileList');
+  el.innerHTML += `<div class="docs-uploading" id="uploadingMsg">Uploading ${files.length} file(s)...</div>`;
 
   for (const file of files) {
     const formData = new FormData();
@@ -1056,29 +1083,25 @@ async function uploadFiles(input) {
       const data = await res.json();
       if (res.ok) {
         uploadedDocs.push({ name: file.name, blob: file });
+      } else {
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('messages').style.display = 'flex';
-        addRawMsg(`📎 <strong>${escHtml(file.name)}</strong> uploaded! Ask me anything about it.`);
-      } else {
-        addMsg(`❌ Failed to upload "${escHtml(file.name)}": ${data.detail || 'Unknown error'}`, 'ai');
+        addRawMsg(`<strong>Failed to upload "${escHtml(file.name)}":</strong> ${data.detail || 'Unknown error'}`);
       }
     } catch(e) {
-      addMsg(`❌ Could not upload "${escHtml(file.name)}".`, 'ai');
+      document.getElementById('welcomeScreen').style.display = 'none';
+      document.getElementById('messages').style.display = 'flex';
+      addRawMsg(`Could not upload "${escHtml(file.name)}".`);
     }
   }
-  document.getElementById(loadingId)?.remove();
+
+  document.getElementById('uploadingMsg')?.remove();
   renderDocsList();
+  updateDocsToggleUI();
   input.value = '';
 }
 
-async function clearFile() {
-  const userId = currentUser?.user_id || 'default';
-  await fetch(`${BACKEND}/clear-file/${encodeURIComponent(userId)}`, {method:'DELETE'});
-  uploadedDocs = [];
-  renderDocsList();
-}
-
-// ── RESTORE SESSION ───────────────────────────────────
+// RESTORE SESSION
 (function restoreSession() {
   const saved = getSession();
   if (saved && saved.user_id) {
