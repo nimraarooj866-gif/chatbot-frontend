@@ -945,6 +945,16 @@ function addMsg(text, role) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+function addRawMsg(html) {
+  const msgs = document.getElementById('messages');
+  const typing = document.getElementById('typing');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.innerHTML = `<div class="msg-bubble">${html}</div><div class="msg-time">${timeNow()}</div>`;
+  msgs.insertBefore(div, typing);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
 function timeNow() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
@@ -1048,7 +1058,7 @@ async function uploadFiles(input) {
         uploadedDocs.push({ name: file.name, blob: file });
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('messages').style.display = 'flex';
-        addMsg(`📎 <strong>${escHtml(file.name)}</strong> uploaded! Ask me anything about it.`, 'ai');
+        addRawMsg(`📎 <strong>${escHtml(file.name)}</strong> uploaded! Ask me anything about it.`);
       } else {
         addMsg(`❌ Failed to upload "${escHtml(file.name)}": ${data.detail || 'Unknown error'}`, 'ai');
       }
