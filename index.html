@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -486,7 +487,7 @@ async function verifyLoginOtp() {
 
 // ─── ENTER CHAT ───────────────────────────────────────────────────────────────
 
-function enterChat(user) {
+async function enterChat(user) {
   currentUser = user;
   saveSession(user);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -494,7 +495,7 @@ function enterChat(user) {
   document.getElementById('userEmailSidebar').textContent = user.email;
   document.getElementById('userAvatar').textContent = user.email[0].toUpperCase();
   loadChatList();
-  loadDocsFromStorage(); // ← DOCUMENTS RESTORE ON LOGIN/SESSION RESTORE
+  await loadDocsFromStorage(); // ← await so docs are restored before anything resets them
 }
 
 // ─── LOGOUT ───────────────────────────────────────────────────────────────────
@@ -506,18 +507,22 @@ function logout() {
   clearSession();
   clearDocsFromStorage(); // ← CLEAR DOCS ON LOGOUT
   document.body.classList.remove('chat-open');
-  resetChatUI();
+  resetChatUI(true);
   showPage('loginFormPage');
 }
 
-function resetChatUI() {
+function resetChatUI(clearDocs = false) {
   document.getElementById('messages').innerHTML = `<div class="typing msg ai" id="typing"><div class="msg-bubble">Thinking...</div></div>`;
   document.getElementById('welcomeScreen').style.display = 'flex';
   document.getElementById('messages').style.display = 'none';
   document.getElementById('chatTopbarTitle').textContent = 'AI Chatbot';
   document.getElementById('chatList').innerHTML = '<div class="sidebar-empty">No chats yet. Start a new one!</div>';
-  renderDocsList();
-  updateDocsToggleUI();
+  if (clearDocs) {
+    uploadedDocs = [];
+    docsActive = true;
+    renderDocsList();
+    updateDocsToggleUI();
+  }
 }
 
 // ─── CHAT LIST ────────────────────────────────────────────────────────────────
@@ -822,10 +827,10 @@ async function uploadFiles(input) {
 
 // ─── RESTORE SESSION ──────────────────────────────────────────────────────────
 
-(function restoreSession() {
+(async function restoreSession() {
   const saved = getSession();
   if (saved && saved.user_id) {
-    enterChat(saved);
+    await enterChat(saved);
   }
 })();
 </script>
