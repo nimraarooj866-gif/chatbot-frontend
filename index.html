@@ -280,6 +280,14 @@ body.chat-open .chat-app { display: flex; }
 <script>
 const BACKEND = "https://chatbot-backend-production-182b.up.railway.app";
 const SESSION_KEY = "chatbot_session";
+
+let currentUser = null;
+let pendingEmail = null;
+let pendingPassword = null;
+let currentChatId = null;
+let chatList = [];
+let uploadedDocs = [];
+let docsActive = true;
 // ─── DOCS PERSISTENCE (backend-based, cross-device) ────────────────────────
 
 async function loadDocsFromBackend() {
